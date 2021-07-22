@@ -1,0 +1,170 @@
+.roleInfoArea .topBox
+{
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.roleInfoArea .bottomBox
+{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.roleInfoArea .label
+{
+    display: -webkit-flex !important;
+    align-items: center !important;
+    font-size: 15px;
+    color: #999999;
+    white-space: nowrap;
+}
+
+.roleInfoArea .nameLabel
+{
+    margin-bottom: 5px
+}
+
+.roleInfoArea input
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.roleInfoArea .nameInput
+{
+    margin-bottom: 5px;
+}
+
+.roleInfoArea input:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.roleInfoArea ::placeholder
+{
+    color: #cccccc;
+}
+
+.roleInfoArea button
+{
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.roleInfoArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.roleInfoArea .editButton, .roleInfoArea .deleteButton
+{
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    border: solid 1px #cccccc;
+    background-color: #cccccc;
+    color: #000000;
+    font-weight: bold;
+}
+
+.roleInfoArea .addTimeButton
+{
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: solid 1px #cccccc;
+    background-color: #ffffff;
+    color: #999999;
+}
+
+.roleInfoArea .time
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    border-bottom: solid 1px #cccccc;
+}
+
+.roleInfoArea .timeInfo
+{
+    padding: 10px;
+}
+
+.roleInfoArea .timeTopBox
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.roleInfoArea .timeMiddleBox
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr 1fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.roleInfoArea .timeBottomBox
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr 0fr;
+    grid-column-gap: 10px;
+}
+
+.roleInfoArea .timeInput
+{
+    cursor: text;
+}
+
+.roleInfoArea .useButton
+{
+    width: 20px;
+    border: none;
+}
+
+.roleInfoArea .useButtonText
+{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    word-spacing: 1px;
+    writing-mode: vertical-lr;
+    transform: scale(-1, -1);
+}
+
+.roleInfoArea .dayButton
+{
+    height: 20px;
+    padding: 0px 5px;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.roleInfoArea .trackButton
+{
+    width: 15px;
+    height: 15px;
+    margin: auto 0px;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
+}
+
+.roleInfoArea .removeButton
+{
+    width: 10px;
+    height: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}

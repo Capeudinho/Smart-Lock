@@ -1,0 +1,72 @@
+.roleListArea .topBox
+{
+    display: grid;
+    grid-template-columns: 1fr 0fr 0fr;
+    grid-column-gap: 10px;
+    padding: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.roleListArea .bottomBox
+{
+    padding: 10px;
+}
+
+.roleListArea input
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.roleListArea .label
+{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #999999;
+}
+
+.roleListArea input:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.roleListArea button
+{
+    padding: 5px 10px;
+    border: solid 1px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.roleListArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.roleListArea .roleButton
+{
+    width: 100%;
+    border: none;
+    border-bottom: solid 1px #cccccc;
+    background-color: #ffffff;
+    text-align: left;
+}
+
+.roleListArea .loadButton
+{
+    width: 100%;
+    font-weight: bold;
+}
+
+.roleListArea .searchButton, .roleListArea .createRoleButton
+{
+    height: 30px;
+    margin-top: auto;
+    border: #cccccc;
+    background-color: #cccccc;
+    color: #000000;
+    font-weight: bold;
+}

@@ -1,0 +1,113 @@
+.accountEnterArea
+{
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    height: 100%;
+}
+
+.accountEnterArea .form
+{
+    border-right: solid 1px #cccccc;
+    padding: 10px;
+}
+
+.accountEnterArea .title
+{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.accountEnterArea .label
+{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #999999;
+}
+
+.accountEnterArea input
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.accountEnterArea input:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.accountEnterArea ::placeholder
+{
+    color: #cccccc;
+}
+
+.accountEnterArea button
+{
+    width: 100%;
+    padding: 5px 10px;
+    border: solid 1px;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.accountEnterArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.accountEnterArea .logInButton
+{
+    border: #cccccc;
+    background-color: #cccccc;
+    margin-bottom: 20px;
+}
+
+.accountEnterArea .signUpButton
+{
+    border: #cccccc;
+    background-color: #cccccc;
+    margin-bottom: 10px;
+}
+
+.accountEnterArea .nameInput, .accountEnterArea .emailInput
+{
+    margin-bottom: 5px;
+}
+
+.accountEnterArea .passwordInputGroup
+{
+    display: grid;
+    grid-template-columns: 1fr 0fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.accountEnterArea .message
+{
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border: solid 1px #cccccc;
+    background-color: #F2F2F2;
+    color: #333333;
+    font-size: 15px;
+    animation: fadeOut 2s linear 2s;
+}
+
+@keyframes fadeOut
+{
+    0%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}

@@ -1,0 +1,9 @@
+.baseTopArea .ownerName
+{
+    height: 45px;
+    padding: 10px;
+    background-color: #2895cc;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+}

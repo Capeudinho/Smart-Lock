@@ -1,0 +1,44 @@
+.baseLeftArea
+{
+    padding: 10px;
+}
+
+.baseLeftArea button
+{
+    width: 100%;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    background-color: #cccccc;
+    border: solid 1px #cccccc;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.baseLeftArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.baseLeftArea .message
+{
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border: solid 1px #cccccc;
+    background-color: #F2F2F2;
+    color: #333333;
+    font-size: 15px;
+    animation: fadeOut 2s linear 2s;
+}
+
+@keyframes fadeOut
+{
+    0%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        opacity: 0;
+    }
+}

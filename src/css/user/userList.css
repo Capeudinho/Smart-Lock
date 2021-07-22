@@ -1,0 +1,72 @@
+.userListArea .topBox
+{
+    display: grid;
+    grid-template-columns: 1fr 0fr 0fr;
+    grid-column-gap: 10px;
+    padding: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userListArea .bottomBox
+{
+    padding: 10px;
+}
+
+.userListArea input
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.userListArea .label
+{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #999999;
+}
+
+.userListArea input:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.userListArea button
+{
+    padding: 5px 10px;
+    border: solid 1px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.userListArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.userListArea .userButton
+{
+    width: 100%;
+    border: none;
+    border-bottom: solid 1px #cccccc;
+    background-color: #ffffff;
+    text-align: left;
+}
+
+.userListArea .loadButton
+{
+    width: 100%;
+    font-weight: bold;
+}
+
+.userListArea .searchButton, .userListArea .createUserButton
+{
+    height: 30px;
+    margin-top: auto;
+    border: #cccccc;
+    background-color: #cccccc;
+    color: #333333;
+    font-weight: bold;
+}

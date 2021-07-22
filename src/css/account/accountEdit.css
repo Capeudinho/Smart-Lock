@@ -1,0 +1,74 @@
+.accountEditArea
+{
+    display: grid;
+    grid-template-columns: 2fr 4fr;
+    height: 100%;
+}
+
+.accountEditArea .form
+{
+    border-right: solid 1px #cccccc;
+    padding: 10px;
+}
+
+.accountEditArea .label
+{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #999999;
+}
+
+.accountEditArea input
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.accountEditArea input:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.accountEditArea ::placeholder
+{
+    color: #cccccc;
+}
+
+.accountEditArea button
+{
+    width: 100%;
+    padding: 5px 10px;
+    border: solid 1px;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.accountEditArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.accountEditArea .updateButton, .accountEditArea .logOutButton, .accountEditArea .deleteButton
+{
+    border-color: #cccccc;
+    background-color: #cccccc;
+    margin-bottom: 10px;
+}
+
+.accountEditArea .nameInput, .accountEditArea .emailInput
+{
+    margin-bottom: 5px;
+}
+
+.accountEditArea .passwordInputGroup
+{
+    display: grid;
+    grid-template-columns: 1fr 0fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}

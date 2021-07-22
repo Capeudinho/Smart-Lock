@@ -1,0 +1,220 @@
+.userInfoArea .topBox
+{
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userInfoArea .middleBox
+{
+    padding: 5px 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userInfoArea .bottomBox
+{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.userInfoArea .label
+{
+    display: -webkit-flex !important;
+    align-items: center !important;
+    font-size: 15px;
+    color: #999999;
+    white-space: nowrap;
+}
+
+.userInfoArea .nameLabel
+{
+    margin-bottom: 5px;
+}
+
+.userInfoArea input, .userInfoArea select
+{
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    font-size: 15px;
+}
+
+.userInfoArea select
+{
+    cursor: pointer;
+}
+
+.userInfoArea .nameInput
+{
+    margin-bottom: 5px;
+}
+
+.userInfoArea input:focus-within, .userInfoArea select:focus-within
+{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.userInfoArea ::placeholder
+{
+    color: #cccccc;
+}
+
+.userInfoArea button
+{
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.userInfoArea button:hover
+{
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.userInfoArea .editButton, .userInfoArea .deleteButton
+{
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    border: solid 1px #cccccc;
+    background-color: #cccccc;
+    color: #000000;
+    font-weight: bold;
+}
+
+.userInfoArea .addPINButton, .userInfoArea .addRoleButton
+{
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: solid 1px #cccccc;
+    background-color: #ffffff;
+    color: #999999;
+}
+
+.userInfoArea .PIN
+{
+    display: grid;
+    grid-template-columns: 1fr 0fr;
+    grid-column-gap: 10px;
+    padding: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userInfoArea .roleInfo
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    grid-column-gap: 10px;
+    padding: 10px;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userInfoArea .time
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    border-bottom: solid 1px #cccccc;
+}
+
+.userInfoArea .timeInfo
+{
+    padding: 10px;
+}
+
+.userInfoArea .timeTopBox
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.userInfoArea .timeMiddleBox
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr 0fr;
+    grid-column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.userInfoArea .timeBottomBox
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr 0fr;
+    grid-column-gap: 10px;
+}
+
+.userInfoArea .useButton
+{
+    width: 20px;
+    border: none;
+}
+
+.userInfoArea .useButtonText
+{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    word-spacing: 1px;
+    writing-mode: vertical-lr;
+    transform: scale(-1, -1);
+}
+
+.userInfoArea .dayValue
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 0px 5px;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.userInfoArea .timeValue
+{
+    font-size: 15px;
+}
+
+.userInfoArea .trackValue
+{
+    width: 15px;
+    height: 15px;
+    margin: auto 0px;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
+}
+
+.userInfoArea .removeButton
+{
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+
+.userInfoArea .downArrowButton
+{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid #666666;
+    cursor: pointer;
+}
+
+.userInfoArea .rightArrowButton
+{
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-left: 10px solid #666666;
+    border-bottom: 5px solid transparent;
+    cursor: pointer;
+}

@@ -1,0 +1,51 @@
+.routes
+{
+    height: 100%;
+    overflow: auto;
+}
+
+.routes .area
+{
+    height: 100%;
+}
+
+.routes .otherBottomSection
+{
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    flex-grow: 1;
+    height: 100%;
+    padding-top: 45px;
+}
+
+.routes .topSection
+{
+    position: fixed;
+    width: 100%;
+}
+
+.routes .bottomSection
+{
+    display: grid;
+    grid-template-columns: 1fr 4fr 2fr;
+    height: 100%;
+    padding-top: 44px;
+}
+
+.routes .centerSection
+{
+    border-left: solid 1px #cccccc;
+    border-right: solid 1px #cccccc;
+}
+
+.routes .fullSection
+{
+    border-left: solid 1px #cccccc;
+}
+
+.routes .itemCenterArea
+{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100%;
+}
