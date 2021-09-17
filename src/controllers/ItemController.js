@@ -1,6 +1,7 @@
 const Item = require ("../models/Item");
 const Role = require ("../models/Role");
 const Time = require ("../models/Time");
+const {getStatusByLock} = require ("../managers/statusManager");
 
 module.exports =
 {
@@ -44,6 +45,11 @@ module.exports =
                     item.roles[a].times[b] = await Time.findById (item.roles[a].times[b]).lean ();
                 }
             }
+        }
+        else
+        {
+            var status = await getStatusByLock (_id);
+            item.status = status;
         }
         return response.json (item);
     },

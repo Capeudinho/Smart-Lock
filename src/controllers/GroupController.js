@@ -1,6 +1,7 @@
 const Group = require ("../models/Group");
 const Item = require("../models/Item");
 const {addToMonitorsByGroup, removeFromMonitorsByGroup} = require ("../managers/monitorManager");
+const {removeFromStatusByGroup} = require ("../managers/statusManager");
 
 module.exports =
 {
@@ -62,6 +63,7 @@ module.exports =
     {
         const {_id} = request.query;
         await removeFromMonitorsByGroup (_id);
+        await removeFromStatusByGroup (_id);
         const group = await Group.findByIdAndDelete (_id);
         await Item.deleteMany ({parents: _id});
         return response.json (group);

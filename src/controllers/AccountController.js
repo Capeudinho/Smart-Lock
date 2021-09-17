@@ -6,6 +6,7 @@ const Role = require ("../models/Role");
 const Time = require ("../models/Time");
 const Log = require ("../models/Log");
 const {addToMonitorsByAccount, removeFromMonitorsByAccount} = require ("../managers/monitorManager");
+const {addToMqttByAccount, removeFromMqttByAccount, removeFromMqttByUnused, testBrokerHost} = require ("../managers/mqttManager");
 
 module.exports =
 {
@@ -36,9 +37,25 @@ module.exports =
         var newAccount = null;
         if (account === null)
         {
-            newAccount = await Account.create ({name, email, password});
+            newAccount = await Account.create
+            (
+                {
+                    name,
+                    email,
+                    password,
+                    connectionOptions:
+                    {
+                        brokerHost: "mqtt://broker.hivemq.com",
+                        accessCheckTopic: "smartlock/accesscheck",
+                        accessReplyTopic: "smartlock/accessreply",
+                        statusUpdateTopic: "smartlock/statusupdate",
+                        directCommandTopic: "smartlock/directcommand"
+                    }
+                }
+            );
             await Group.create ({name: "Root", parents: [], roles: [], usedTimes: [], owner: newAccount._id});
-            addToMonitorsByAccount (newAccount._id)
+            addToMonitorsByAccount (newAccount._id);
+            await addToMqttByAccount (newAccount._id);
         }
         return response.json (newAccount);
     },
@@ -56,9 +73,29 @@ module.exports =
         return response.json (newAccount);
     },
 
+    async connectionoptionsidupdate (request, response)
+    {
+        const {_id} = request.query;
+        const {connectionOptions} = request.body;
+        if (await testBrokerHost (connectionOptions.brokerHost))
+        {
+            await removeFromMqttByAccount (_id);
+            newAccount = await Account.findByIdAndUpdate (_id, {connectionOptions}, {new: true});
+            await addToMqttByAccount (_id);
+            await removeFromMqttByUnused ();
+            return response.json (newAccount);
+        }
+        else
+        {
+            return response.json (null);
+        }
+    },
+
     async iddestroy (request, response)
     {
         const {_id} = request.query;
+        await removeFromMqttByAccount (_id);
+        await removeFromMqttByUnused ();
         removeFromMonitorsByAccount (_id);
         const account = await Account.findByIdAndDelete (_id);
         await User.deleteMany ({owner: _id});

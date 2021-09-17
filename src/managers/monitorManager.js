@@ -1,4 +1,3 @@
-const io = require ("./websocketManager");
 const Account = require ("../models/Account");
 const User = require ("../models/User");
 const Group = require ("../models/Group");
@@ -458,7 +457,7 @@ async function removeFromMonitorsByGroup (groupId)
                 {
                     for (var b = 0; b < timeRelation.accessRelations.length; b++)
                     {
-                        if (lockIds.includes (timeRelation.accessRelations[b].lockId))
+                        if (lockIds.includes (timeRelation.accessRelations[b].lockId.toString ()))
                         {
                             timeRelation.accessRelations.splice (b, 1);
                             b--;

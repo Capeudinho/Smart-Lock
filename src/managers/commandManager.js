@@ -1,14 +1,8 @@
-const mqtt = require ("mqtt");
+const {openLockById} = require ("./mqttManager");
 
-const client = mqtt.connect ("mqtt://broker.hivemq.com");
-
-function open (lockId, time)
+function commandOpen (lockId)
 {
-    client.publish
-    (
-        "commandOpen",
-        lockId+" "+time
-    );
+    openLockById (lockId);
 }
 
-module.exports = {open};
+module.exports = {commandOpen};

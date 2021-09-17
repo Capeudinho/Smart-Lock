@@ -15,6 +15,7 @@ routes.get ("/accountidindex", AccountController.idindex);
 routes.get ("/accountloginindex", AccountController.loginindex);
 routes.post ("/accountstore", AccountController.store);
 routes.put ("/accountidupdate", AccountController.idupdate);
+routes.put ("/accountconnectionoptionsidupdate", AccountController.connectionoptionsidupdate);
 routes.delete ("/accountiddestroy", AccountController.iddestroy);
 
 routes.get ("/userlist", UserController.list);
@@ -42,6 +43,7 @@ routes.delete ("/groupiddestroy", GroupController.iddestroy);
 
 routes.get ("/locklist", LockController.list);
 routes.get ("/lockidindex", LockController.idindex);
+routes.get ("/lockidopen", LockController.idopen);
 routes.post ("/lockstore", LockController.store);
 routes.put ("/lockidupdate", LockController.idupdate);
 routes.put ("/lockidupdatemove", LockController.idupdatemove);

@@ -1,7 +1,9 @@
 const Lock = require ("../models/Lock");
 const Group = require ("../models/Group");
 const Item = require ("../models/Item");
+const {commandOpen} = require ("../managers/commandManager");
 const {addToMonitorsByLock, removeFromMonitorsByLock} = require ("../managers/monitorManager");
+const {addToStatusByLock, removeFromStatusByLock} = require ("../managers/statusManager");
 
 module.exports =
 {
@@ -19,6 +21,13 @@ module.exports =
         return response.json (lock);
     },
 
+    async idopen (request, response)
+    {
+        const {_id} = request.query;
+        commandOpen (_id);
+        return response.json (_id);
+    },
+
     async store (request, response)
     {
         const {name, lastParent, owner} = request.body;
@@ -26,6 +35,7 @@ module.exports =
         var parents = parent.parents.concat (lastParent);
         const newLock = await Lock.create ({name, parents, owner});
         await addToMonitorsByLock (newLock._id);
+        await addToStatusByLock (newLock._id);
         return response.json (newLock);
     },
 
@@ -60,6 +70,7 @@ module.exports =
     {
         const {_id} = request.query;
         await removeFromMonitorsByLock (_id);
+        await removeFromStatusByLock (_id);
         const lock = await Lock.findByIdAndDelete (_id);
         return response.json (lock);
     }
