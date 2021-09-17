@@ -48,6 +48,9 @@ function BaseLeft ()
             <Link to = "/logs">
                 <button>Logs</button>
             </Link>
+            <Link to = "/connection">
+                <button>Connection</button>
+            </Link>
             <Link to = "/account">
                 <button>Account</button>
             </Link>

@@ -22,6 +22,7 @@ function ItemInfo ({match, location})
     const [name, setName] = useState ("");
     const [type, setType] = useState ("");
     const [roles, setRoles] = useState ([]);
+    const [status, setStatus] = useState ({state: null, power: null});
     const [redirect, setRedirect] = useState (<></>);
 
     useEffect
@@ -61,6 +62,10 @@ function ItemInfo ({match, location})
                             }
                         }
                         setRoles (response.data.roles);
+                    }
+                    else
+                    {
+                        setStatus (response.data.status);
                     }
                     setName (response.data.name);
                     setType (response.data.type);
@@ -323,6 +328,24 @@ function ItemInfo ({match, location})
         setRedirect (<Redirect to = {deletedItemUrl ()}/>);
     }
 
+    async function handleOpen ()
+    {
+        await api.get
+        (
+            "/lockidopen",
+            {
+                params:
+                {
+                    _id: match.params.id
+                }
+            }
+        );
+        // var newStatus = {...status};
+        // newStatus.state = "Open";
+        // setStatus (newStatus);
+        setMessage ({text: "Lock successfully opened.", key: Math.random ()});
+    }
+
     return (
         <div className = "itemInfoArea">
             <div className = "topBox">
@@ -537,6 +560,23 @@ function ItemInfo ({match, location})
                 >
                     Delete item
                 </button>
+            </div>
+            <div
+            className = "lockOptions"
+            style = {{display: type === "Lock" ? "block" : "none"}}
+            >
+                <button
+                className = "openButton"
+                onClick = {() => {handleOpen ()}}
+                >
+                    Open manualy
+                </button>
+                <div className = "statusBox">
+                    <div className = "label stateLabel">State</div>
+                    <div className = "stateValue">{status.state !== null ? status.state : "Unknown"}</div>
+                    <div className = "label powerLabel">Power</div>
+                    <div className = "powerValue">{status.power !== null ? status.power : "Unknown"}</div>
+                </div>
             </div>
             {redirect}
         </div>

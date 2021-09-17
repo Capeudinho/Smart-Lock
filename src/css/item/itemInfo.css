@@ -1,3 +1,10 @@
+.itemInfoArea
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .itemInfoArea .topBox
 {
     padding-top: 10px;
@@ -8,6 +15,14 @@
 .itemInfoArea .bottomBox
 {
     padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.itemInfoArea .lockOptions
+{
+    margin-top: auto;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -31,6 +46,7 @@
     padding: 5px 10px;
     border-bottom: solid 1px #cccccc;
 }
+
 
 .itemInfoArea input, .itemInfoArea select
 {
@@ -66,7 +82,7 @@
     box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
-.itemInfoArea .editButton, .itemInfoArea .moveButton, .itemInfoArea .deleteButton
+.itemInfoArea .editButton, .itemInfoArea .moveButton, .itemInfoArea .deleteButton, .itemInfoArea .openButton
 {
     margin-bottom: 10px;
     width: 100%;
@@ -85,6 +101,15 @@
     border-bottom: solid 1px #cccccc;
     background-color: #ffffff;
     color: #999999;
+}
+
+.itemInfoArea .statusBox
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr 0fr;
+    grid-column-gap: 10px;
+    padding: 5px 10px;
+    border: solid 1px #cccccc;
 }
 
 .itemInfoArea .roleInfo
@@ -162,7 +187,7 @@
     font-weight: bold;
 }
 
-.itemInfoArea .timeValue
+.itemInfoArea .timeValue, .itemInfoArea .stateValue, .itemInfoArea .powerValue
 {
     font-size: 15px;
 }

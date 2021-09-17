@@ -37,6 +37,15 @@ function ItemList ({match, location})
                 setPage (1);
                 setListType (true);
             }
+            else
+            {
+                setItems ([]);
+                setName ("");
+                setPage (1);
+                setPages (1);
+                setListType (true);
+                setPathInfos ([]);
+            }
         },
         [match.url, loggedAccount]
     );

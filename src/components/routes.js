@@ -19,6 +19,7 @@ import ItemInfo from "./item/ItemInfo";
 import RoleList from "./role/RoleList";
 import RoleInfo from "./role/RoleInfo";
 import LogList from "./log/LogList";
+import ConnectionEdit from "./connection/ConnectionEdit";
 
 import loggedAccountContext from "./contexts/loggedAccount";
 import accountRolesContext from "./contexts/accountRoles";
@@ -34,7 +35,23 @@ import deletedRoleContext from "./contexts/deletedRole";
 
 function Routes ()
 {
-    const [loggedAccount, setLoggedAccount] = useState ({name: "", email: "", password: "", _id: ""});
+    const [loggedAccount, setLoggedAccount] = useState
+    (
+        {
+            _id: "",
+            name: "",
+            email: "",
+            password: "",
+            connectionOptions:
+            {
+                brokerHost: "",
+                accessCheckTopic: "",
+                accessReplyTopic: "",
+                statusUpdateTopic: "",
+                directCommandTopic: ""
+            }
+        }
+    );
     const [accountRoles, setAccountRoles] = useState ([]);
     const [message, setMessage] = useState (null);
     const [editedUser, setEditedUser] = useState ({});
@@ -209,6 +226,30 @@ function Routes ()
                                             </div>
                                             <div className = "mainSection fullSection">
                                                 <LogList/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        }
+                        />
+                        <Route
+                        path = "/connection"
+                        render =
+                        {
+                            () =>
+                            {
+                                return (
+                                    <div className = "area">
+                                        <div className = "topSection">
+                                            <BaseTop/>
+                                        </div>
+                                        <div className = "otherBottomSection">
+                                            <div className = "mainSection leftSection">
+                                                <BaseLeft/>
+                                            </div>
+                                            <div className = "mainSection fullSection">
+                                                <ConnectionEdit/>
                                             </div>
                                         </div>
                                     </div>

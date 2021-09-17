@@ -113,14 +113,12 @@ function AccountEdit ()
                 <div className = "label nameLabel">Name</div>
                 <input
                 className = "nameInput"
-                placeholder = "Name"
                 value = {name}
                 onChange = {(e) => {handleChangeName (e)}}
                 />
                 <div className = "label emailLabel">E-mail</div>
                 <input
                 className = "emailInput"
-                placeholder = "E-mail"
                 value = {email}
                 onChange = {(e) => {handleChangeEmail (e)}}
                 />
@@ -128,7 +126,6 @@ function AccountEdit ()
                 <div className = "passwordInputGroup">
                     <input
                     className = "passwordInput"
-                    placeholder = "Password"
                     value = {password}
                     type = {showPassword ? "text" : "password"}
                     onChange = {(e) => {handleChangePassword (e)}}
