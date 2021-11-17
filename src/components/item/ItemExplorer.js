@@ -3,6 +3,7 @@ import api from "../../services/api";
 import {Link} from "react-router-dom";
 
 import loggedAccountContext from "../contexts/loggedAccount";
+import overlayContext from "../contexts/overlay";
 import createdItemContext from "../contexts/createdItem";
 import editedItemContext from "../contexts/editedItem";
 import movedItemContext from "../contexts/movedItem";
@@ -13,11 +14,13 @@ import "../../css/item/itemExplorer.css";
 function ItemExplorer ({location})
 {
     const {loggedAccount, setLoggedAccount} = useContext (loggedAccountContext);
+    const {overlay, setOverlay} = useContext (overlayContext);
     const {createdItem, setCreatedItem} = useContext (createdItemContext);
     const {editedItem, setEditedItem} = useContext (editedItemContext);
     const {movedItem, setMovedItem} = useContext (movedItemContext);
     const {deletedItem, setDeletedItem} = useContext (deletedItemContext);
     const [items, setItems] = useState ([]);
+    const [hover, setHover] = useState ({button: ""});
 
     useEffect
     (
@@ -26,6 +29,7 @@ function ItemExplorer ({location})
             let mounted = true;
             const runEffect = async () =>
             {
+                setOverlay (true);
                 const response = await api.get
                 (
                     "/itemparentindex",
@@ -39,6 +43,7 @@ function ItemExplorer ({location})
                 );
                 if (mounted)
                 {
+                    setOverlay (false);
                     for (var a = 0; a < response.data.length; a++)
                     {
                         response.data[a].expanded = false;
@@ -145,7 +150,7 @@ function ItemExplorer ({location})
         [createdItem]
     );
 
-    function newUrl (_id)
+    function newGroupUrl (_id)
     {
         var url = location.pathname;
         var array = url.split ("/");
@@ -161,12 +166,35 @@ function ItemExplorer ({location})
         return url;
     }
 
+    function newLockUrl (_id)
+    {
+        var url = location.pathname;
+        var array = url.split ("/");
+        if (array[2] === undefined)
+        {
+            array[2] = "item";
+            array[3] = _id;
+        }
+        else if (array[2] === "item")
+        {
+            array[3] = _id;
+        }
+        else
+        {
+            array[3] = "item";
+            array[4] = _id;
+        }
+        url = array.join ("/");
+        return url;
+    }
+
     async function handleExpand (index)
     {
         var newItems = [...items];
         if (items[index].expanded === false)
         {
             newItems[index].expanded = true;
+            setOverlay (true);
             const response = await api.get
             (
                 "/itemparentindex",
@@ -178,6 +206,7 @@ function ItemExplorer ({location})
                     }
                 }
             );
+            setOverlay (false);
             for (var a = 0; a < response.data.length; a++)
             {
                 response.data[a].expanded = false;
@@ -202,39 +231,110 @@ function ItemExplorer ({location})
 
     return (
         <div className = "itemExplorerArea">
-            {
-                items.map
-                (
-                    (item, index) =>
-                    {
-                        if (item.type === "Group")
+            <div className = "itemExplorerContainer">
+                {
+                    items.map
+                    (
+                        (item, index) =>
                         {
                             return (
-                                <div key = {index} className = "group">
+                                <div key = {index} className = "item">
                                     <div className = "spaceBox">
                                         {
                                             item.parents.map
                                             (
-                                                (parent, index) =>
+                                                (parent, parentIndex) =>
                                                 {
                                                     return (
                                                         <div
                                                         className = "line"
-                                                        key = {index}
+                                                        key = {parentIndex}
+                                                        style =
+                                                        {
+                                                            {
+                                                                marginBottom:
+                                                                index+1 === items.length ||
+                                                                // items[index+1].parents.length < item.parents.length ?
+                                                                items[index+1].parents.length < parentIndex+1 ?
+                                                                "5px" :
+                                                                "0px"
+                                                            }
+                                                        }
                                                         />
                                                     );
                                                 }
                                             )
                                         }
-                                        <div
-                                        className = {item.expanded ? "downArrowButton" : "rightArrowButton"}
-                                        onClick = {() => handleExpand (index)}
-                                        />
+                                        <div className = "expandButtonBox">
+                                            {
+                                                item.type === "Group" ?
+                                                <img
+                                                className = "expandButton"
+                                                src =
+                                                {
+                                                    item.expanded ?
+                                                    process.env.PUBLIC_URL+"/opened-icon.svg" :
+                                                    process.env.PUBLIC_URL+"/closed-icon.svg"
+                                                }
+                                                onClick = {() => handleExpand (index)}
+                                                /> :
+                                                <img
+                                                className = "lockIcon"
+                                                src = {process.env.PUBLIC_URL+"/lock-icon.svg"}
+                                                />
+                                            }
+                                        </div>
                                     </div>
-                                    <Link key = {index} to = {newUrl (item._id)}>
+                                    <Link
+                                    className = "itemLink"
+                                    key = {index}
+                                    onMouseEnter = {() => {setHover ({button: item._id})}}
+                                    onMouseLeave = {() => {setHover ({button: ""})}}
+                                    style = {{marginBottom: "5px"}}
+                                    to = {item.type === "Group" ? newGroupUrl (item._id) : newLockUrl (item._id)}
+                                    >
+                                        <div
+                                        className = "iconBox"
+                                        style =
+                                        {
+                                            {
+                                                backgroundColor:
+                                                hover.button === item._id ?
+                                                "#f2f2f2" :
+                                                "#e6e6e6",
+                                                borderColor:
+                                                hover.button === item._id ?
+                                                "#f2f2f2" :
+                                                "#e6e6e6"
+                                            }
+                                        }
+                                        >
+                                            <img
+                                            className = "icon"
+                                            src =
+                                            {
+                                                item.type === "Group" ?
+                                                process.env.PUBLIC_URL+"/group-grey-icon.svg" :
+                                                process.env.PUBLIC_URL+"/lock-grey-icon.svg"
+                                            }
+                                            />
+                                        </div>
                                         <button
-                                        className = "groupButton"
+                                        className = "itemButton"
                                         key = {index}
+                                        style =
+                                        {
+                                            {
+                                                backgroundColor:
+                                                hover.button === item._id ?
+                                                "#f2f2f2" :
+                                                "#ffffff",
+                                                borderColor:
+                                                hover.button === item._id ?
+                                                "#f2f2f2" :
+                                                "#e6e6e6"
+                                            }
+                                        }
                                         >
                                             {item.name}
                                         </button>
@@ -242,36 +342,9 @@ function ItemExplorer ({location})
                                 </div>
                             );
                         }
-                        else
-                        {
-                            return (
-                                <div key = {index} className = "lock">
-                                    <div className = "spaceBox">
-                                        {
-                                            item.parents.map
-                                            (
-                                                (parent, index) =>
-                                                {
-                                                    return (
-                                                        <div
-                                                        className = "line"
-                                                        key = {index}
-                                                        />
-                                                    );
-                                                }
-                                            )
-                                        }
-                                        <div className = "lockIcon"/>
-                                    </div>
-                                    <div key = {index} className = "lockName">
-                                        {item.name}
-                                    </div>
-                                </div>
-                            );
-                        }
-                    }
-                )
-            }
+                    )
+                }
+            </div>
         </div>
     );
 }

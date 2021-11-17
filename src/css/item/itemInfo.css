@@ -3,113 +3,121 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-color: #ffffff;
+}
+
+.itemInfoContainer
+{
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: 0px;
 }
 
 .itemInfoArea .topBox
 {
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
 }
 
 .itemInfoArea .bottomBox
 {
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.itemInfoArea .lockOptions
-{
-    margin-top: auto;
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr 0fr 0fr;
+    grid-column-gap: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.itemInfoArea .label
+.itemInfoArea .protocolFields
 {
-    display: -webkit-flex !important;
-    align-items: center !important;
-    font-size: 15px;
-    color: #999999;
-    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-.itemInfoArea .nameLabel
+.itemInfoArea .lockBox
 {
-    padding-bottom: 5px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
-
-.itemInfoArea .roleLabel
-{
-    padding: 5px 10px;
-    border-bottom: solid 1px #cccccc;
-}
-
 
 .itemInfoArea input, .itemInfoArea select
 {
     width: 100%;
     padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
 }
 
 .itemInfoArea select
 {
+    padding: 4px 1px;
     cursor: pointer;
+}
+
+.itemInfoArea input:hover, .itemInfoArea select:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .itemInfoArea input:focus-within, .itemInfoArea select:focus-within
 {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.itemInfoArea ::placeholder
+.itemInfoArea .label
 {
-    color: #cccccc;
+    width: 100%;
+    margin-bottom: 5px;
+    color: #999999;
+}
+
+.itemInfoArea .daysLabel, .itemInfoArea .startLabel, .itemInfoArea .endLabel, .itemInfoArea .trackAccessLabel, .itemInfoArea .trackMissLabel
+{
+    display: -webkit-flex !important;
+    align-items: center !important;
+    margin-bottom: 0px;
+    white-space: nowrap;
+}
+
+.itemInfoArea .PINInput, .itemInfoArea .protocolSelect, .itemInfoArea .hostInput, .itemInfoArea .portInput
+{
+    margin-bottom: 10px;
 }
 
 .itemInfoArea button
 {
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
     white-space: nowrap;
 }
 
 .itemInfoArea button:hover
 {
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.itemInfoArea .editButton, .itemInfoArea .moveButton, .itemInfoArea .deleteButton, .itemInfoArea .openButton
+.itemInfoArea .roleList
 {
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 5px 10px;
-    border: solid 1px #cccccc;
-    background-color: #cccccc;
-    color: #000000;
-    font-weight: bold;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .itemInfoArea .addRoleButton
 {
     width: 100%;
-    padding: 5px 10px;
-    border: none;
-    border-bottom: solid 1px #cccccc;
+    padding: 5px;
     background-color: #ffffff;
-    color: #999999;
-}
-
-.itemInfoArea .statusBox
-{
-    display: grid;
-    grid-template-columns: 0fr 0fr 0fr 0fr;
-    grid-column-gap: 10px;
-    padding: 5px 10px;
-    border: solid 1px #cccccc;
+    color: #666666;
 }
 
 .itemInfoArea .roleInfo
@@ -117,49 +125,61 @@
     display: grid;
     grid-template-columns: 0fr 1fr 0fr;
     grid-column-gap: 10px;
-    padding: 10px;
-    border-bottom: solid 1px #cccccc;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .itemInfoArea .time
 {
     display: grid;
     grid-template-columns: 0fr 1fr;
-    border-bottom: solid 1px #cccccc;
+    margin-bottom: 5px;
+    border-radius: 5px;
 }
 
 .itemInfoArea .timeInfo
 {
-    padding: 10px;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    border-left: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #ffffff;
 }
 
 .itemInfoArea .timeTopBox
 {
     display: grid;
     grid-template-columns: 0fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-column-gap: 10px;
-    margin-bottom: 10px;
+    grid-column-gap: 5px;
+    margin-bottom: 5px;
 }
 
 .itemInfoArea .timeMiddleBox
 {
     display: grid;
-    grid-template-columns: 0fr 0fr 0fr 0fr;
-    grid-column-gap: 10px;
-    margin-bottom: 10px;
+    grid-template-columns: 0fr 1fr 0fr 1fr;
+    grid-column-gap: 5px;
+    margin-bottom: 5px;
 }
 
 .itemInfoArea .timeBottomBox
 {
     display: grid;
     grid-template-columns: 0fr 0fr 0fr 0fr;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
 }
 
 .itemInfoArea .useButton
 {
+    height: 100%;
     width: 20px;
-    border: none;
+    padding: 0px;
+    border: solid 1px;
+    border-right: none;
+    border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .itemInfoArea .useButtonText
@@ -182,48 +202,75 @@
     height: 20px;
     padding: 0px 5px;
     border: solid 1px #cccccc;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 12px;
     font-weight: bold;
 }
 
-.itemInfoArea .timeValue, .itemInfoArea .stateValue, .itemInfoArea .powerValue
+.itemInfoArea .timeValue
 {
-    font-size: 15px;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
 }
 
-.itemInfoArea .trackValue
+.itemInfoArea .trackAccessValue, .itemInfoArea .trackMissValue
 {
     width: 15px;
     height: 15px;
     margin: auto 0px;
     border: solid 1px #cccccc;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
-.itemInfoArea .removeButton
+.itemInfoArea .expandButton, .itemInfoArea .removeButton
 {
     width: 10px;
     height: 10px;
     cursor: pointer;
 }
 
-.itemInfoArea .downArrowButton
+.itemInfoArea .statusBox
 {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 10px solid #666666;
-    cursor: pointer;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    background-color: #f2f2f2;
 }
 
-.itemInfoArea .rightArrowButton
+.itemInfoArea .propertyList
 {
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-left: 10px solid #666666;
-    border-bottom: 5px solid transparent;
-    cursor: pointer;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    column-gap: 5px;
+    row-gap: 5px;
+}
+
+.itemInfoArea .propertyGroup
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr;
+    grid-column-gap: 5px;
+    width: min-content;
+    display: -webkit-flex !important;
+    align-items: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    white-space: nowrap;
+}
+
+.itemInfoArea .propertyName
+{
+    color: #999999;
+}
+
+.itemInfoArea .icon
+{
+    height: 20px;
+    width: 20px;
 }

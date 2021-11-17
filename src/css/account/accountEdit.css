@@ -1,68 +1,84 @@
 .accountEditArea
 {
     display: grid;
-    grid-template-columns: 2fr 4fr;
+    grid-template-columns: 400px 1fr;
     height: 100%;
+    background-color: #ffffff;
 }
 
 .accountEditArea .form
 {
-    border-right: solid 1px #cccccc;
     padding: 10px;
+    border-right: solid 1px #cccccc;
+    background-color: #ffffff;
+}
+
+.accountEditArea .bottomBox
+{
+    display: grid;
+    grid-template-rows: 0fr 0fr 0fr 0fr;
+    grid-row-gap: 10px;
+}
+
+.accountEditArea input
+{
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+}
+
+.accountEditArea input:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
+}
+
+.accountEditArea input:focus-within
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .accountEditArea .label
 {
     width: 100%;
     margin-bottom: 5px;
-    font-size: 15px;
     color: #999999;
-}
-
-.accountEditArea input
-{
-    width: 100%;
-    padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
-}
-
-.accountEditArea input:focus-within
-{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
-
-.accountEditArea ::placeholder
-{
-    color: #cccccc;
 }
 
 .accountEditArea button
 {
-    width: 100%;
-    padding: 5px 10px;
-    border: solid 1px;
-    color: #000000;
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
     font-weight: bold;
     white-space: nowrap;
 }
 
 .accountEditArea button:hover
 {
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.accountEditArea .updateButton, .accountEditArea .logOutButton, .accountEditArea .deleteButton
+.accountEditArea .fullButton
 {
-    border-color: #cccccc;
-    background-color: #cccccc;
-    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    grid-row-gap: 5px;
+    width: 100%;
 }
 
-.accountEditArea .nameInput, .accountEditArea .emailInput
+.accountEditArea .buttonText
 {
-    margin-bottom: 5px;
+    width: 100%;
+    padding-right: 20px;
 }
 
 .accountEditArea .passwordInputGroup
@@ -70,5 +86,40 @@
     display: grid;
     grid-template-columns: 1fr 0fr;
     grid-column-gap: 10px;
-    margin-bottom: 10px;
+}
+
+.accountEditArea .icon
+{
+    height: 20px;
+    width: 20px;
+}
+
+.accountEditArea .splash
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2996cc;
+}
+
+.accountEditArea .logoContainer
+{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.accountEditArea .logo
+{
+    height: 200px;
+    width: 200px;
+}
+
+.accountEditArea .welcome
+{
+    color: #ffffff;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
 }

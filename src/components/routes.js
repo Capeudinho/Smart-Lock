@@ -20,10 +20,12 @@ import RoleList from "./role/RoleList";
 import RoleInfo from "./role/RoleInfo";
 import LogList from "./log/LogList";
 import ConnectionEdit from "./connection/ConnectionEdit";
+import MessageList from "./message/MessageList";
 
 import loggedAccountContext from "./contexts/loggedAccount";
 import accountRolesContext from "./contexts/accountRoles";
 import messageContext from "./contexts/message";
+import overlayContext from "./contexts/overlay";
 import editedUserContext from "./contexts/editedUser";
 import deletedUserContext from "./contexts/deletedUser";
 import createdItemContext from "./contexts/createdItem";
@@ -44,16 +46,22 @@ function Routes ()
             password: "",
             connectionOptions:
             {
+                identifier: "",
                 brokerHost: "",
                 accessCheckTopic: "",
                 accessReplyTopic: "",
                 statusUpdateTopic: "",
-                directCommandTopic: ""
+                directCommandTopic: "",
+                accessCheckRoute: "",
+                accessReplyRoute: "",
+                statusUpdateRoute: "",
+                directCommandRoute: ""
             }
         }
     );
     const [accountRoles, setAccountRoles] = useState ([]);
-    const [message, setMessage] = useState (null);
+    const [message, setMessage] = useState ([]);
+    const [overlay, setOverlay] = useState (false);
     const [editedUser, setEditedUser] = useState ({});
     const [deletedUser, setDeletedUser] = useState ({});
     const [createdItem, setCreatedItem] = useState ({});
@@ -74,6 +82,7 @@ function Routes ()
                 if (localStorage.getItem ("account") !== null)
                 {
                     const account = JSON.parse (localStorage.getItem ("account"));
+                    setOverlay (true);
                     const response = await api.get
                     (
                         "/accountloginindex",
@@ -85,6 +94,7 @@ function Routes ()
                             }
                         }
                     );
+                    setOverlay (false);
                     if (response.data === null)
                     {
                         localStorage.clear ();
@@ -101,7 +111,7 @@ function Routes ()
                 }
             }
             runEffect();
-            return (() => {mounted = false});
+            return (() => {mounted = false;});
         },
         []
     );
@@ -117,9 +127,10 @@ function Routes ()
                 {
                     if (loggedAccount !== null)
                     {
+                        setOverlay (true);
                         const response = await api.get
                         (
-                            "/rolelist",
+                            "/rolelistowner",
                             {
                                 params:
                                 {
@@ -127,6 +138,7 @@ function Routes ()
                                 }
                             }
                         );
+                        setOverlay (false);
                         if (mounted)
                         {
                             setAccountRoles (response.data);
@@ -150,6 +162,7 @@ function Routes ()
                 <loggedAccountContext.Provider value = {{loggedAccount, setLoggedAccount}}>
                 <accountRolesContext.Provider value = {{accountRoles, setAccountRoles}}>
                 <messageContext.Provider value = {{message, setMessage}}>
+                <overlayContext.Provider value = {{overlay, setOverlay}}>
                 <editedUserContext.Provider value = {{editedUser, setEditedUser}}>
                 <deletedUserContext.Provider value = {{deletedUser, setDeletedUser}}>
                 <createdItemContext.Provider value = {{createdItem, setCreatedItem}}>
@@ -158,6 +171,10 @@ function Routes ()
                 <deletedItemContext.Provider value = {{deletedItem, setDeletedItem}}>
                 <editedRoleContext.Provider value = {{editedRole, setEditedRole}}>
                 <deletedRoleContext.Provider value = {{deletedRole, setDeletedRole}}>
+                    <div
+                    className = "overlay"
+                    style = {{display: overlay ? "block" : "none"}}
+                    />
                     <Switch>
                         <Route
                         exact
@@ -179,12 +196,29 @@ function Routes ()
                                                 <Home/>
                                             </div>
                                         </div>
+                                        <MessageList/>
                                     </div>
                                 );
                             }
                         }
                         />
-                        <Route path = "/enter" component = {AccountEnter}/>
+                        <Route
+                        path = "/enter"
+                        render =
+                        {
+                            () =>
+                            {
+                                return (
+                                    <div className = "area">
+                                        <div className = "areaSection">
+                                            <AccountEnter/>
+                                        </div>
+                                        <MessageList/>
+                                    </div>
+                                );
+                            }
+                        }
+                        />
                         <Route
                         path = "/account"
                         render =
@@ -204,6 +238,7 @@ function Routes ()
                                                 <AccountEdit/>
                                             </div>
                                         </div>
+                                        <MessageList/>
                                     </div>
                                 );
                             }
@@ -228,6 +263,7 @@ function Routes ()
                                                 <LogList/>
                                             </div>
                                         </div>
+                                        <MessageList/>
                                     </div>
                                 );
                             }
@@ -252,6 +288,7 @@ function Routes ()
                                                 <ConnectionEdit/>
                                             </div>
                                         </div>
+                                        <MessageList/>
                                     </div>
                                 );
                             }
@@ -298,6 +335,7 @@ function Routes ()
                                                 <Route path = "/roles/:id" component = {RoleInfo}/>
                                             </div>
                                         </div>
+                                        <MessageList/>
                                     </div>
                                 );
                             }
@@ -312,6 +350,7 @@ function Routes ()
                 </createdItemContext.Provider>
                 </deletedUserContext.Provider>
                 </editedUserContext.Provider>
+                </overlayContext.Provider>
                 </messageContext.Provider>
                 </accountRolesContext.Provider>
                 </loggedAccountContext.Provider>

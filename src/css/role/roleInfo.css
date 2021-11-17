@@ -1,132 +1,182 @@
+.roleInfoArea
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.roleInfoContainer
+{
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: 0px;
+}
+
 .roleInfoArea .topBox
 {
     padding-top: 10px;
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    border-bottom: solid 1px #cccccc;
 }
 
 .roleInfoArea .bottomBox
 {
-    padding-top: 10px;
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr;
+    grid-column-gap: 10px;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
-}
-
-.roleInfoArea .label
-{
-    display: -webkit-flex !important;
-    align-items: center !important;
-    font-size: 15px;
-    color: #999999;
-    white-space: nowrap;
-}
-
-.roleInfoArea .nameLabel
-{
-    margin-bottom: 5px
 }
 
 .roleInfoArea input
 {
     width: 100%;
     padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
 }
 
 .roleInfoArea .nameInput
 {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.roleInfoArea input:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .roleInfoArea input:focus-within
 {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.roleInfoArea ::placeholder
+.roleInfoArea .label
 {
-    color: #cccccc;
+    width: 100%;
+    color: #999999;
+}
+
+.roleInfoArea .nameLabel
+{
+    margin-bottom: 5px;
+}
+
+.roleInfoArea .daysLabel, .roleInfoArea .startLabel, .roleInfoArea .endLabel, .roleInfoArea .trackAccessLabel, .roleInfoArea .trackMissLabel, .roleInfoArea .timesLabel
+{
+    display: -webkit-flex !important;
+    align-items: center !important;
+    white-space: nowrap;
 }
 
 .roleInfoArea button
 {
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
     white-space: nowrap;
 }
 
 .roleInfoArea button:hover
 {
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.roleInfoArea .editButton, .roleInfoArea .deleteButton
+.roleInfoArea .timeList
 {
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 5px 10px;
-    border: solid 1px #cccccc;
-    background-color: #cccccc;
-    color: #000000;
-    font-weight: bold;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .roleInfoArea .addTimeButton
 {
     width: 100%;
-    padding: 5px 10px;
-    border: none;
-    border-bottom: solid 1px #cccccc;
+    padding: 5px;
     background-color: #ffffff;
-    color: #999999;
+    color: #666666;
 }
 
 .roleInfoArea .time
 {
     display: grid;
     grid-template-columns: 0fr 1fr 0fr;
-    border-bottom: solid 1px #cccccc;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .roleInfoArea .timeInfo
 {
-    padding: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    border-left: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .roleInfoArea .timeTopBox
 {
     display: grid;
     grid-template-columns: 0fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-column-gap: 10px;
-    margin-bottom: 10px;
+    grid-column-gap: 5px;
+    margin-bottom: 5px;
 }
 
 .roleInfoArea .timeMiddleBox
 {
     display: grid;
     grid-template-columns: 0fr 1fr 0fr 1fr;
-    grid-column-gap: 10px;
-    margin-bottom: 10px;
+    grid-column-gap: 5px;
+    margin-bottom: 5px;
 }
 
 .roleInfoArea .timeBottomBox
 {
     display: grid;
     grid-template-columns: 0fr 0fr 0fr 0fr;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
 }
 
 .roleInfoArea .timeInput
 {
+    background-color: #cccccc;
+    border-color: #cccccc;
     cursor: text;
+}
+
+.roleInfoArea .timeInput:hover
+{
+    background-color: #d9d9d9;
+    border-color: #d9d9d9;
+}
+
+.roleInfoArea .timeInput:focus-within
+{
+    background-color: #d9d9d9;
+    border-color: #d9d9d9;
 }
 
 .roleInfoArea .useButton
 {
+    height: 100%;
     width: 20px;
-    border: none;
+    padding: 0px;
+    border: solid 1px;
+    border-right: none;
+    border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .roleInfoArea .useButtonText
@@ -139,32 +189,38 @@
     word-spacing: 1px;
     writing-mode: vertical-lr;
     transform: scale(-1, -1);
+    user-select: none;
 }
 
 .roleInfoArea .dayButton
 {
     height: 20px;
+    width: 100%;
     padding: 0px 5px;
     border: solid 1px #cccccc;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 12px;
     font-weight: bold;
 }
 
-.roleInfoArea .trackButton
+.roleInfoArea .trackAccessButton, .roleInfoArea .trackMissButton
 {
     width: 15px;
     height: 15px;
     margin: auto 0px;
     border: solid 1px #cccccc;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .roleInfoArea .removeButton
 {
     width: 10px;
     height: 10px;
-    margin-top: 10px;
-    margin-right: 10px;
     cursor: pointer;
+}
+
+.roleInfoArea .icon
+{
+    height: 20px;
+    width: 20px;
 }

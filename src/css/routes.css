@@ -1,7 +1,7 @@
 .routes
 {
     height: 100%;
-    overflow: auto;
+    overflow: initial;
 }
 
 .routes .area
@@ -9,10 +9,23 @@
     height: 100%;
 }
 
+.overlay
+{
+  position: fixed;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.0);
+}
+
 .routes .otherBottomSection
 {
     display: grid;
-    grid-template-columns: 1fr 6fr;
+    grid-template-columns: 0fr 6fr;
     flex-grow: 1;
     height: 100%;
     padding-top: 45px;
@@ -27,7 +40,7 @@
 .routes .bottomSection
 {
     display: grid;
-    grid-template-columns: 1fr 4fr 2fr;
+    grid-template-columns: 0fr 4fr 2fr;
     height: 100%;
     padding-top: 45px;
 }
@@ -43,9 +56,39 @@
     border-left: solid 1px #cccccc;
 }
 
+.routes .areaSection
+{
+    height: 100%;
+}
+
 .routes .itemCenterArea
 {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 2fr 3fr;
     height: 100%;
+}
+
+::-webkit-scrollbar
+{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track
+{
+    background: #e6e6e6;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background: #cccccc;
+}
+
+::-webkit-scrollbar-thumb:hover
+{
+    background: #b3b3b3;
+}
+
+::-webkit-scrollbar-thumb:active
+{
+    background: #999999;
 }

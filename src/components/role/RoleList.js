@@ -5,6 +5,7 @@ import {Link, Redirect} from "react-router-dom";
 import loggedAccountContext from "../contexts/loggedAccount";
 import accountRolesContext from "../contexts/accountRoles";
 import messageContext from "../contexts/message";
+import overlayContext from "../contexts/overlay";
 import editedRoleContext from "../contexts/editedRole";
 import deletedRoleContext from "../contexts/deletedRole";
 
@@ -15,12 +16,14 @@ function RoleList ()
     const {loggedAccount, setLoggedAccount} = useContext (loggedAccountContext);
     const {accountRoles, setAccountRoles} = useContext (accountRolesContext);
     const {message, setMessage} = useContext (messageContext);
+    const {overlay, setOverlay} = useContext (overlayContext);
     const {editedRole, setEditedRole} = useContext (editedRoleContext);
     const {deletedRole, setDeletedRole} = useContext (deletedRoleContext);
     const [roles, setRoles] = useState ([]);
     const [name, setName] = useState ("");
     const [page, setPage] = useState (1);
     const [pages, setPages] = useState (1);
+    const [hover, setHover] = useState ({button: ""});
     const [redirect, setRedirect] = useState (<></>);
     const [update, setUpdate] = useState (0);
 
@@ -31,6 +34,7 @@ function RoleList ()
             let mounted = true;
             const runEffect = async () =>
             {
+                setOverlay (true);
                 const response = await api.get
                 (
                     "/rolelistpag",
@@ -45,6 +49,7 @@ function RoleList ()
                 );
                 if (mounted)
                 {
+                    setOverlay (false);
                     setPages (response.data.pages);
                     if (page === 1)
                     {
@@ -126,9 +131,9 @@ function RoleList ()
         }
     }
 
-    function handleLoadMore ()
+    function handleLoadMore (e)
     {
-        if (page < pages)
+        if (e.target.scrollHeight-e.target.scrollTop <= e.target.clientHeight*1.2 && page < pages)
         {
             setPage (page+1);
         }
@@ -136,6 +141,7 @@ function RoleList ()
 
     async function handleCreateRole ()
     {
+        setOverlay (true);
         const response = await api.post
         (
             "/rolestore",
@@ -145,6 +151,7 @@ function RoleList ()
                 owner: loggedAccount._id
             }
         );
+        setOverlay (false);
         var newAccountRoles = [...accountRoles];
         newAccountRoles.unshift (response.data);
         setAccountRoles (newAccountRoles);
@@ -154,7 +161,7 @@ function RoleList ()
             newRoles.unshift (response.data);
             setRoles (newRoles);
         }
-        setMessage ({text: "Role successfully created.", key: Math.random ()});
+        setMessage ([{text: "Role successfully created.", key: Math.random ()}]);
         setRedirect (<Redirect to = {`/roles/${response.data._id}`}/>);
     }
 
@@ -166,32 +173,83 @@ function RoleList ()
                     <input
                     value = {name}
                     onChange = {(e) => {handleChangeName (e)}}
+                    spellCheck = {false}
                     />
                 </div>
                 <button
                 className = "searchButton"
                 onClick = {() => {handleSearch ()}}
                 >
-                    Search
+                    <img
+                    className = "icon"
+                    src = {process.env.PUBLIC_URL+"/search-icon.svg"}
+                    />
                 </button>
                 <button
                 className = "createRoleButton"
                 onClick = {() => {handleCreateRole ()}}
                 >
-                    Create role
+                    <img
+                    className = "icon"
+                    src = {process.env.PUBLIC_URL+"/create-role-icon.svg"}
+                    />
                 </button>
             </div>
-            <div className = "roleList">
+            <div
+            className = "roleList"
+            onScroll = {(e) => {handleLoadMore (e)}}
+            >
                 {
                     roles.map
                     (
                         (role, index) =>
                         {
                             return (
-                                <Link key = {index} to = {`/roles/${role._id}`}>
+                                <Link
+                                className = "roleLink"
+                                key = {index}
+                                onMouseEnter = {() => {setHover ({button: role._id})}}
+                                onMouseLeave = {() => {setHover ({button: ""})}}
+                                to = {`/roles/${role._id}`}
+                                >
+                                    <div
+                                    className = "iconBox"
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === role._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6",
+                                            borderColor:
+                                            hover.button === role._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
+                                    >
+                                        <img
+                                        className = "icon"
+                                        src = {process.env.PUBLIC_URL+"/role-grey-icon.svg"}
+                                        />
+                                    </div>
                                     <button
                                     className = "roleButton"
-                                    key = {index}>
+                                    key = {index}
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === role._id ?
+                                            "#f2f2f2" :
+                                            "#ffffff",
+                                            borderColor:
+                                            hover.button === role._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
+                                    >
                                         {role.name}
                                     </button>
                                 </Link>
@@ -199,21 +257,6 @@ function RoleList ()
                         }
                     )
                 }
-            </div>
-            <div className = "bottomBox">
-                <button
-                className = "loadButton"
-                style =
-                {
-                    {
-                        backgroundColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        borderColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        color: page === pages ? "#7f7f7f" : "#000000"
-                    }
-                }
-                onClick = {() => {handleLoadMore ()}}>
-                    Load more
-                </button>
             </div>
             {redirect}
         </div>

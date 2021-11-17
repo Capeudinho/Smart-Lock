@@ -2,15 +2,17 @@ import React, {useState, useEffect, useContext} from "react";
 import api from "../../services/api";
 
 import loggedAccountContext from "../contexts/loggedAccount";
+import overlayContext from "../contexts/overlay";
 
 import "../../css/log/logList.css";
 
 function LogList ()
 {
     const {loggedAccount, setLoggedAccount} = useContext (loggedAccountContext);
+    const {overlay, setOverlay} = useContext (overlayContext);
     const [logs, setLogs] = useState ([]);
     const [page, setPage] = useState (1);
-    const [pages, setPages] = useState (1);
+    const [pages, setPages] = useState (0);
     const [user, setUser] = useState ("");
     const [item, setItem] = useState ("");
     const [role, setRole] = useState ("");
@@ -25,6 +27,7 @@ function LogList ()
             let mounted = true;
             const runEffect = async () =>
             {
+                setOverlay (true);
                 const response = await api.get
                 (
                     "/loglistpag",
@@ -43,6 +46,7 @@ function LogList ()
                 );
                 if (mounted)
                 {
+                    setOverlay (false);
                     setPages (response.data.pages);
                     if (page === 1)
                     {
@@ -72,9 +76,9 @@ function LogList ()
         }
     }
 
-    function handleLoadMore ()
+    function handleLoadMore (e)
     {
-        if (page < pages)
+        if (e.target.scrollHeight-e.target.scrollTop <= e.target.clientHeight*1.25 && page < pages && overlay === false)
         {
             setPage (page+1);
         }
@@ -116,62 +120,69 @@ function LogList ()
     return (
         <div className = "logListArea">
             <div className = "topBox">
-                <div className = "topGroups">
-                    <div className = "userGroup">
-                        <div className = "label userLabel">User</div>
-                        <input
-                        className = "userInput"
-                        value = {user}
-                        onChange = {(e) => {handleChangeUser (e)}}
-                        />
-                    </div>
-                    <div className = "itemGroup">
-                        <div className = "label itemLabel">Item</div>
-                        <input
-                        className = "itemInput"
-                        value = {item}
-                        onChange = {(e) => {handleChangeItem (e)}}
-                        />
-                    </div>
-                    <div className = "roleGroup">
-                        <div className = "label roleLabel">Role</div>
-                        <input
-                        className = "roleInput"
-                        value = {role}
-                        onChange = {(e) => {handleChangeRole (e)}}
-                        />
-                    </div>
+                <div className = "userGroup">
+                    <div className = "label userLabel">User</div>
+                    <input
+                    className = "userInput"
+                    value = {user}
+                    onChange = {(e) => {handleChangeUser (e)}}
+                    spellCheck = {false}
+                    />
                 </div>
-                <div className = "bottomGroups">
-                    <div className = "startGroup">
-                        <div className = "label startLabel">Interval start</div>
-                        <input
-                        className = "startInput"
-                        style = {{height: 30}}
-                        type = "datetime-local"
-                        value = {start}
-                        onChange = {(e) => {handleChangeStart (e)}}
-                        />
-                    </div>
-                    <div className = "endGroup">
-                        <div className = "label endLabel">Interval end</div>
-                        <input
-                        className = "endInput"
-                        style = {{height: 30}}
-                        type = "datetime-local"
-                        value = {end}
-                        onChange = {(e) => {handleChangeEnd (e)}}
-                        />
-                    </div>
-                    <button
-                    className = "searchButton"
-                    onClick = {() => {handleSearch ()}}
-                    >
-                        Search
-                    </button>
+                <div className = "itemGroup">
+                    <div className = "label itemLabel">Item</div>
+                    <input
+                    className = "itemInput"
+                    value = {item}
+                    onChange = {(e) => {handleChangeItem (e)}}
+                    spellCheck = {false}
+                    />
                 </div>
+                <div className = "roleGroup">
+                    <div className = "label roleLabel">Role</div>
+                    <input
+                    className = "roleInput"
+                    value = {role}
+                    onChange = {(e) => {handleChangeRole (e)}}
+                    spellCheck = {false}
+                    />
+                </div>
+                <div className = "startGroup">
+                    <div className = "label startLabel">Interval start</div>
+                    <input
+                    className = "startInput"
+                    value = {start}
+                    onChange = {(e) => {handleChangeStart (e)}}
+                    type = "datetime-local"
+                    style = {{height: 30}}
+                    spellCheck = {false}
+                    />
+                </div>
+                <div className = "endGroup">
+                    <div className = "label endLabel">Interval end</div>
+                    <input
+                    className = "endInput"
+                    value = {end}
+                    onChange = {(e) => {handleChangeEnd (e)}}
+                    type = "datetime-local"
+                    style = {{height: 30}}
+                    spellCheck = {false}
+                    />
+                </div>
+                <button
+                className = "searchButton"
+                onClick = {() => {handleSearch ()}}
+                >
+                    <img
+                    className = "icon"
+                    src = {process.env.PUBLIC_URL+"/search-icon.svg"}
+                    />
+                </button>
             </div>
-            <div className = "logList">
+            <div
+            className = "logList"
+            onScroll = {(e) => {handleLoadMore (e)}}
+            >
                 {
                     logs.map
                     (
@@ -187,6 +198,7 @@ function LogList ()
                                     {
                                         {
                                             backgroundColor: log.type === "Access" ? "#28cc28" : "#cc2828",
+                                            borderColor: log.type === "Access" ? "#28cc28" : "#cc2828",
                                             color: log.type === "Access" ? "#0a330a" : "#330a0a"
                                         }
                                     }
@@ -242,22 +254,6 @@ function LogList ()
                         }
                     )
                 }
-            </div>
-            <div className = "bottomBox">
-                <button
-                className = "loadButton"
-                style =
-                {
-                    {
-                        backgroundColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        borderColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        color: page === pages ? "#7f7f7f" : "#000000"
-                    }
-                }
-                onClick = {() => {handleLoadMore ()}}
-                >
-                    Load more
-                </button>
             </div>
         </div>
     );

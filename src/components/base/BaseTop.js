@@ -13,6 +13,10 @@ function BaseTop ()
             <div className = "ownerName">
                 {loggedAccount !== null ? loggedAccount.name : ""}
             </div>
+            <img
+            className = "logo"
+            src = {process.env.PUBLIC_URL+"/logo-bordered.svg"}
+            />
         </div>
     );
 }

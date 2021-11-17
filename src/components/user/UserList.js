@@ -4,6 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 
 import loggedAccountContext from "../contexts/loggedAccount";
 import messageContext from "../contexts/message";
+import overlayContext from "../contexts/overlay";
 import editedUserContext from "../contexts/editedUser";
 import deletedUserContext from "../contexts/deletedUser";
 
@@ -13,12 +14,14 @@ function UserList ()
 {
     const {loggedAccount, setLoggedAccount} = useContext (loggedAccountContext);
     const {message, setMessage} = useContext (messageContext);
+    const {overlay, setOverlay} = useContext (overlayContext);
     const {editedUser, setEditedUser} = useContext (editedUserContext);
     const {deletedUser, setDeletedUser} = useContext (deletedUserContext);
     const [users, setUsers] = useState ([]);
     const [name, setName] = useState ("");
     const [page, setPage] = useState (1);
     const [pages, setPages] = useState (1);
+    const [hover, setHover] = useState ({button: ""});
     const [redirect, setRedirect] = useState (<></>);
     const [update, setUpdate] = useState (0);
 
@@ -29,6 +32,7 @@ function UserList ()
             let mounted = true;
             const runEffect = async () =>
             {
+                setOverlay (true);
                 const response = await api.get
                 (
                     "/userlistpag",
@@ -43,6 +47,7 @@ function UserList ()
                 );
                 if (mounted)
                 {
+                    setOverlay (false);
                     setPages (response.data.pages);
                     if (page === 1)
                     {
@@ -124,9 +129,9 @@ function UserList ()
         }
     }
 
-    function handleLoadMore ()
+    function handleLoadMore (e)
     {
-        if (page < pages)
+        if (e.target.scrollHeight-e.target.scrollTop <= e.target.clientHeight*1.2 && page < pages)
         {
             setPage (page+1);
         }
@@ -134,6 +139,7 @@ function UserList ()
 
     async function handleCreateUser ()
     {
+        setOverlay (true);
         const response = await api.post
         (
             "/userstore",
@@ -145,13 +151,14 @@ function UserList ()
                 owner: loggedAccount._id
             }
         );
+        setOverlay (false);
         if (name === "" || response.data.name.toUpperCase ().includes (name.toUpperCase ()))
         {
             var newUsers = [...users];
             newUsers.unshift (response.data);
             setUsers (newUsers);
         }
-        setMessage ({text: "User successfully created.", key: Math.random ()});
+        setMessage ([{text: "User successfully created.", key: Math.random ()}]);
         setRedirect (<Redirect to = {`/users/${response.data._id}`}/>);
     }
 
@@ -161,34 +168,86 @@ function UserList ()
                 <div className = "nameBox">
                     <div className = "label nameLabel">Name</div>
                     <input
+                    className = "nameInput"
                     value = {name}
                     onChange = {(e) => {handleChangeName (e)}}
+                    spellCheck = {false}
                     />
                 </div>
                 <button
                 className = "searchButton"
                 onClick = {() => {handleSearch ()}}
                 >
-                    Search
+                    <img
+                    className = "icon"
+                    src = {process.env.PUBLIC_URL+"/search-icon.svg"}
+                    />
                 </button>
                 <button
                 className = "createUserButton"
                 onClick = {() => {handleCreateUser ()}}
                 >
-                    Create user
+                    <img
+                    className = "icon"
+                    src = {process.env.PUBLIC_URL+"/create-user-icon.svg"}
+                    />
                 </button>
             </div>
-            <div className = "userList">
+            <div
+            className = "userList"
+            onScroll = {(e) => {handleLoadMore (e)}}
+            >
                 {
                     users.map
                     (
                         (user, index) =>
                         {
                             return (
-                                <Link key = {index} to = {`/users/${user._id}`}>
+                                <Link
+                                className = "userLink"
+                                key = {index}
+                                onMouseEnter = {() => {setHover ({button: user._id})}}
+                                onMouseLeave = {() => {setHover ({button: ""})}}
+                                to = {`/users/${user._id}`}
+                                >
+                                    <div
+                                    className = "iconBox"
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === user._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6",
+                                            borderColor:
+                                            hover.button === user._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
+                                    >
+                                        <img
+                                        className = "icon"
+                                        src = {process.env.PUBLIC_URL+"/user-grey-icon.svg"}
+                                        />
+                                    </div>
                                     <button
                                     className = "userButton"
-                                    key = {index}>
+                                    key = {index}
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === user._id ?
+                                            "#f2f2f2" :
+                                            "#ffffff",
+                                            borderColor:
+                                            hover.button === user._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
+                                    >
                                         {user.name}
                                     </button>
                                 </Link>
@@ -196,21 +255,6 @@ function UserList ()
                         }
                     )
                 }
-            </div>
-            <div className = "bottomBox">
-                <button
-                className = "loadButton"
-                style =
-                {
-                    {
-                        backgroundColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        borderColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        color: page === pages ? "#7f7f7f" : "#000000"
-                    }
-                }
-                onClick = {() => {handleLoadMore ()}}>
-                    Load more
-                </button>
             </div>
             {redirect}
         </div>

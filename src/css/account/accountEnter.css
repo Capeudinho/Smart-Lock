@@ -1,84 +1,100 @@
 .accountEnterArea
 {
     display: grid;
-    grid-template-columns: 2fr 5fr;
+    grid-template-columns: 400px 1fr;
     height: 100%;
+    background-color: #ffffff;
 }
 
 .accountEnterArea .form
 {
-    border-right: solid 1px #cccccc;
     padding: 10px;
+    border-right: solid 1px #cccccc;
+    background-color: #ffffff;
 }
 
 .accountEnterArea .title
 {
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom:10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #cccccc;
     font-size: 15px;
     font-weight: bold;
-    color: #000000;
-}
-
-.accountEnterArea .label
-{
-    width: 100%;
-    margin-bottom: 5px;
-    font-size: 15px;
-    color: #999999;
+    color: #333333;
+    text-align: center;
 }
 
 .accountEnterArea input
 {
     width: 100%;
     padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+}
+
+.accountEnterArea input:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .accountEnterArea input:focus-within
 {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
-.accountEnterArea ::placeholder
+input:-webkit-autofill
 {
-    color: #cccccc;
+    box-shadow: 0 0 0 30px #e6e6e6 inset !important;
+}
+
+input:-webkit-autofill:hover
+{
+    box-shadow: 0 0 0 30px #f2f2f2 inset !important;
+}
+
+input:-webkit-autofill:focus-within
+{
+    box-shadow: 0 0 0 30px #f2f2f2 inset !important;
+}
+
+.accountEnterArea .label
+{
+    width: 100%;
+    margin-bottom: 5px;
+    color: #999999;
 }
 
 .accountEnterArea button
 {
-    width: 100%;
-    padding: 5px 10px;
-    border: solid 1px;
-    color: #000000;
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
     font-weight: bold;
     white-space: nowrap;
 }
 
 .accountEnterArea button:hover
 {
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .accountEnterArea .logInButton
 {
-    border: #cccccc;
-    background-color: #cccccc;
-    margin-bottom: 20px;
-}
-
-.accountEnterArea .signUpButton
-{
-    border: #cccccc;
-    background-color: #cccccc;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
 }
 
 .accountEnterArea .nameInput, .accountEnterArea .emailInput
 {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .accountEnterArea .passwordInputGroup
@@ -89,25 +105,52 @@
     margin-bottom: 10px;
 }
 
-.accountEnterArea .message
+.accountEnterArea .fullButton
 {
-    margin-bottom: 10px;
-    padding: 5px 10px;
-    border: solid 1px #cccccc;
-    background-color: #F2F2F2;
-    color: #333333;
-    font-size: 15px;
-    animation: fadeOut 2s linear 2s;
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    grid-row-gap: 5px;
+    width: 100%;
 }
 
-@keyframes fadeOut
+.accountEnterArea .buttonText
 {
-    0%
-    {
-        opacity: 1;
-    }
-    100%
-    {
-        opacity: 0;
-    }
+    padding-right: 20px;
+}
+
+.accountEnterArea .icon
+{
+    height: 20px;
+    width: 20px;
+}
+
+.accountEnterArea .splash
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2996cc;
+}
+
+.accountEnterArea .logoContainer
+{
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.accountEnterArea .logo
+{
+    height: 200px;
+    width: 200px;
+}
+
+.accountEnterArea .welcome
+{
+    color: #ffffff;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
 }

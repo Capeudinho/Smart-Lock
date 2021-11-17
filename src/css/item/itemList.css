@@ -1,6 +1,10 @@
 .itemListArea
 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     border-left: solid 1px #cccccc;
+    background-color: #ffffff;
 }
 
 .itemListArea .topBox
@@ -19,9 +23,21 @@
     font-size: 15px;
 }
 
-.itemListArea .bottomBox
+.itemListArea .itemList
 {
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: 0px;
     padding: 10px;
+    padding-bottom: 5px;
+}
+
+.itemListArea .itemLink
+{
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    margin-bottom: 5px;
+    text-decoration: none;
 }
 
 .itemListArea .inputGroup
@@ -35,62 +51,60 @@
 {
     width: 100%;
     padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+}
+
+.itemListArea input:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
+}
+
+.itemListArea input:focus-within
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .itemListArea .label
 {
     width: 100%;
     margin-bottom: 5px;
-    font-size: 15px;
     color: #999999;
-}
-
-.itemListArea input:focus-within
-{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
 .itemListArea button
 {
-    padding: 5px 10px;
-    border: solid 1px;
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
     white-space: nowrap;
 }
 
 .itemListArea button:hover
 {
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .itemListArea .itemButton
 {
+    height: auto;
     width: 100%;
-    border: none;
-    border-bottom: solid 1px #cccccc;
-    background-color: #ffffff;
+    padding: 5px;
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     text-align: left;
-}
-
-.itemListArea .loadButton
-{
-    width: 100%;
-    font-weight: bold;
-}
-
-.itemListArea .searchButton, .itemListArea .createGroupButton, .itemListArea .createLockButton
-{
-    border-color: #cccccc;
-    background-color: #cccccc;
-    color: #000000;
-    font-weight: bold;
 }
 
 .itemListArea .createGroupButton, .itemListArea .createLockButton
 {
-    height: 30px;
     margin-top: auto;
 }
 
@@ -105,8 +119,15 @@
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
-    column-gap: 10px;
+    column-gap: 5px;
     color: #999999;
+}
+
+.itemListArea .itemGroup
+{
+    display: grid;
+    grid-template-columns: 0fr 0fr;
+    grid-column-gap: 5px;
 }
 
 .itemListArea .itemPath
@@ -114,7 +135,7 @@
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
-    column-gap: 10px;
+    column-gap: 5px;
     margin-top: 5px;
     color: #999999;
 }
@@ -131,9 +152,10 @@
     justify-content: flex-start;
     column-gap: 10px;
     color: #999999;
+    white-space: nowrap;
 }
 
-.itemListArea .itemLink:hover
+.itemListArea .itemNameLink:hover
 {
     cursor: pointer;
     text-decoration: underline;
@@ -147,4 +169,22 @@
     border-top: 2.5px solid transparent;
     border-left: 5px solid #999999;
     border-bottom: 2.5px solid transparent;
+}
+
+.itemListArea .iconBox
+{
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 30px;
+    padding: 4px;
+    border: solid 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.itemListArea .icon
+{
+    height: 20px;
+    width: 20px;
 }

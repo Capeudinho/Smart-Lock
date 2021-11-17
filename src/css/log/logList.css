@@ -1,27 +1,83 @@
+.logListArea
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #ffffff;
+}
+
 .logListArea .topBox
 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0fr;
+    grid-column-gap: 10px;
     padding: 10px;
     border-bottom: solid 1px #cccccc;
 }
 
-.logListArea .bottomBox
+.logListArea input
 {
-    padding: 10px;
+    width: 100%;
+    padding: 5px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
 }
 
-.logListArea .topGroups
+.logListArea input:hover
 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 10px;
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
+}
+
+.logListArea input:focus-within
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
+}
+
+.logListArea .startInput, .logListArea .endInput
+{
+    cursor: text;
+}
+
+.logListArea .label
+{
+    width: 100%;
     margin-bottom: 5px;
+    color: #999999;
 }
 
-.logListArea .bottomGroups
+.logListArea .infoBox .label
 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 0fr;
-    grid-column-gap: 10px;
+    margin-bottom: 0px;
+}
+
+.logListArea button
+{
+    height: 30px;
+    width: 30px;
+    margin-top: auto;
+    padding: 4px;
+    border: solid 1px #e6e6e6;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+    white-space: nowrap;
+}
+
+.logListArea button:hover
+{
+    border-color: #f2f2f2;
+    background-color: #f2f2f2;
+}
+
+.logListArea .logList
+{
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: 0px;
+    padding: 10px;
+    padding-bottom: 5px;
 }
 
 .logListArea .log
@@ -29,7 +85,7 @@
     display: grid;
     grid-template-columns: 0fr 1fr;
     width: 100%;
-    border-bottom: solid 1px #cccccc;
+    margin-bottom: 5px;
     background-color: #ffffff;
     font-size: 15px;
 }
@@ -39,7 +95,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 100%;
-    padding: 5px 10px;
+    padding: 5px;
+    border: solid 1px #cccccc;
+    border-left: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     text-align: left;
 }
 
@@ -52,7 +112,7 @@
 {
     display: grid;
     grid-template-columns: 0fr 1fr;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
     margin-bottom: 5px;
 }
 
@@ -60,7 +120,7 @@
 {
     display: grid;
     grid-template-columns: 0fr 1fr;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
     margin-bottom: 5px;
 }
 
@@ -68,62 +128,7 @@
 {
     display: grid;
     grid-template-columns: 0fr 1fr;
-    grid-column-gap: 10px;
-}
-
-.logListArea .label
-{
-    display: -webkit-flex !important;
-    align-items: center !important;
-    margin-bottom: 5px;
-    font-size: 15px;
-    color: #999999;
-    white-space: nowrap;
-}
-
-.logListArea .infoBox .label
-{
-    margin-bottom: 0px;
-}
-
-.logListArea input
-{
-    width: 100%;
-    padding: 5px;
-    border: solid 1px #cccccc;
-    font-size: 15px;
-}
-
-.logListArea input:focus-within
-{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
-
-.logListArea button
-{
-    padding: 5px 10px;
-    border: solid 1px #cccccc;
-    background-color: #cccccc;
-    color: #333333;
-    font-size: 15px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.logListArea button:hover
-{
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
-
-.logListArea .searchButton
-{
-    height: 30px;
-    margin-top: auto;
-}
-
-.logListArea .loadButton
-{
-    width: 100%;
+    grid-column-gap: 5px;
 }
 
 .logListArea .typeBox
@@ -132,7 +137,10 @@
     justify-content: center;
     align-items: center;
     width: 20px;
-    border: none;
+    border: solid 1px;
+    border-right: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .logListArea .typeText
@@ -144,8 +152,8 @@
     letter-spacing: 0.5px;
     word-spacing: 1px;
     writing-mode: vertical-lr;
-    cursor: default;
     transform: scale(-1, -1);
+    user-select: none;
 }
 
 .logListArea .date
@@ -161,7 +169,7 @@
     display: flex;
     flex-flow: row;
     justify-content: flex-end;
-    column-gap: 10px;
+    column-gap: 5px;
     color: #999999;
 }
 
@@ -170,7 +178,7 @@
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
-    column-gap: 10px;
+    column-gap: 5px;
 }
 
 .logListArea .rightArrow
@@ -181,4 +189,10 @@
     border-top: 2.5px solid transparent;
     border-left: 5px solid #999999;
     border-bottom: 2.5px solid transparent;
+}
+
+.logListArea .icon
+{
+    height: 20px;
+    width: 20px;
 }

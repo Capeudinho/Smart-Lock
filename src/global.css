@@ -20,10 +20,11 @@ body
     -webkit-font-smoothig: antialiased;
 }
 
-body, input, button
+body, div, input, select, button
 {
     border: none;
     font-family: Roboto, sans-serif;
+    font-size: 15px;
 }
 
 button:hover

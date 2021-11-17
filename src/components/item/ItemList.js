@@ -4,6 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 
 import loggedAccountContext from "../contexts/loggedAccount";
 import messageContext from "../contexts/message";
+import overlayContext from "../contexts/overlay";
 import createdItemContext from "../contexts/createdItem";
 import editedItemContext from "../contexts/editedItem";
 import movedItemContext from "../contexts/movedItem";
@@ -15,6 +16,7 @@ function ItemList ({match, location})
 {
     const {loggedAccount, setLoggedAccount} = useContext (loggedAccountContext);
     const {message, setMessage} = useContext (messageContext);
+    const {overlay, setOverlay} = useContext (overlayContext);
     const {createdItem, setCreatedItem} = useContext (createdItemContext);
     const {editedItem, setEditedItem} = useContext (editedItemContext);
     const {movedItem, setMovedItem} = useContext (movedItemContext);
@@ -25,6 +27,7 @@ function ItemList ({match, location})
     const [pages, setPages] = useState (1);
     const [listType, setListType] = useState (true);
     const [pathInfos, setPathInfos] = useState ([]);
+    const [hover, setHover] = useState ({button: ""});
     const [redirect, setRedirect] = useState (<></>);
 
     useEffect
@@ -36,15 +39,6 @@ function ItemList ({match, location})
                 getItems (true, 1);
                 setPage (1);
                 setListType (true);
-            }
-            else
-            {
-                setItems ([]);
-                setName ("");
-                setPage (1);
-                setPages (1);
-                setListType (true);
-                setPathInfos ([]);
             }
         },
         [match.url, loggedAccount]
@@ -64,7 +58,7 @@ function ItemList ({match, location})
                     {
                         if (listType || name === "" || editedItem.name.toUpperCase ().includes (name.toUpperCase ()))
                         {
-                            if (newItems[a].hasOwnProperty ("parentInfos")) // or 'if (listType)'
+                            if (newItems[a].hasOwnProperty ("parentInfos"))
                             {
                                 var parentInfos = newItems[a].parentInfos;
                                 parentInfos[parentInfos.length-1].name = editedItem.name;
@@ -134,7 +128,7 @@ function ItemList ({match, location})
                         newItems.splice (a, 1);
                         a--;
                     }
-                    else if (newItems[a].hasOwnProperty ("parentInfos")) // or 'if (listType)'
+                    else if (newItems[a].hasOwnProperty ("parentInfos"))
                     {
                         for (var b = 0; b < newItems[a].parentInfos.length; b++)
                         {
@@ -216,6 +210,7 @@ function ItemList ({match, location})
     {
         if (type)
         {
+            setOverlay (true);
             var response = await api.get
             (
                 "/itemparentindexpag",
@@ -227,6 +222,7 @@ function ItemList ({match, location})
                     }
                 }
             );
+            setOverlay (false);
             if (page > 1)
             {
                 setItems ([...items, ...response.data.items.docs]);
@@ -235,11 +231,12 @@ function ItemList ({match, location})
             {
                 setItems (response.data.items.docs);
             }
-            setPages (response.data.items.pages);
             setPathInfos (response.data.parentInfos);
+            setPages (response.data.items.pages);
         }
         else
         {
+            setOverlay (true);
             var response = await api.get
             (
                 "/itemlistpag",
@@ -252,6 +249,7 @@ function ItemList ({match, location})
                     }
                 }
             );
+            setOverlay (false);
             if (page === 1)
             {
                 setItems (response.data.docs);
@@ -265,9 +263,9 @@ function ItemList ({match, location})
         }
     }
 
-    function handleLoadMore ()
+    function handleLoadMore (e)
     {
-        if (page < pages)
+        if (e.target.scrollHeight-e.target.scrollTop <= e.target.clientHeight*1.2 && page < pages)
         {
             getItems (listType, page+1);
             setPage (page+1);
@@ -290,6 +288,7 @@ function ItemList ({match, location})
     {
         if (match.params.hasOwnProperty ("id"))
         {
+            setOverlay (true);
             const response = await api.post
             (
                 "/groupstore",
@@ -301,11 +300,12 @@ function ItemList ({match, location})
                     owner: loggedAccount._id
                 }
             );
+            setOverlay (false);
             var newItems = [...items];
             newItems.unshift (response.data);
             setItems (newItems);
             setCreatedItem (response.data);
-            setMessage ({text: "Group successfully created.", key: Math.random ()});
+            setMessage ([{text: "Group successfully created.", key: Math.random ()}]);
             setRedirect (<Redirect to = {newItemUrl (response.data._id)}/>);
         }
     }
@@ -314,20 +314,25 @@ function ItemList ({match, location})
     {
         if (match.params.hasOwnProperty ("id"))
         {
+            setOverlay (true);
             const response = await api.post
             (
                 "/lockstore",
                 {
                     name: "New lock",
                     lastParent: match.params.id,
+                    protocol: "mqtt",
+                    host: "",
+                    port: "",
                     owner: loggedAccount._id
                 }
             );
+            setOverlay (false);
             var newItems = [...items];
             newItems.unshift (response.data);
             setItems (newItems);
             setCreatedItem (response.data);
-            setMessage ({text: "Lock successfully created.", key: Math.random ()});
+            setMessage ([{text: "Lock successfully created.", key: Math.random ()}]);
             setRedirect (<Redirect to = {newItemUrl (response.data._id)}/>);
         }  
     }
@@ -341,6 +346,7 @@ function ItemList ({match, location})
                     <input
                     value = {name}
                     onChange = {(e) => {handleChangeName (e)}}
+                    spellCheck = {false}
                     />
                 </div>
                 <Link to = {searchUrl ()}>
@@ -348,36 +354,39 @@ function ItemList ({match, location})
                     className = "searchButton"
                     onClick = {() => {handleSearch ()}}
                     >
-                        Search
+                        <img
+                        className = "icon"
+                        src = {process.env.PUBLIC_URL+"/search-icon.svg"}
+                        />
                     </button>
                 </Link>
                 <button
                 className = "createGroupButton"
-                style =
-                {
-                    {
-                        backgroundColor: match.params.hasOwnProperty ("id") ? "#cccccc" : "#e5e5e5",
-                        borderColor: match.params.hasOwnProperty ("id") ? "#cccccc" : "#e5e5e5",
-                        color: match.params.hasOwnProperty ("id") ? "#000000" : "#7f7f7f"
-                    }
-                }
                 onClick = {() => {handleCreateGroup ()}}
                 >
-                    Create group
+                    <img
+                    className = "icon"
+                    src =
+                    {
+                        match.params.hasOwnProperty ("id") ?
+                        process.env.PUBLIC_URL+"/create-group-icon.svg" :
+                        process.env.PUBLIC_URL+"/create-group-grey-icon.svg"
+                    }
+                    />
                 </button>
                 <button
                 className = "createGroupButton"
-                style =
-                {
-                    {
-                        backgroundColor: match.params.hasOwnProperty ("id") ? "#cccccc" : "#e5e5e5",
-                        borderColor: match.params.hasOwnProperty ("id") ? "#cccccc" : "#e5e5e5",
-                        color: match.params.hasOwnProperty ("id") ? "#000000" : "#7f7f7f"
-                    }
-                }
                 onClick = {() => {handleCreateLock ()}}
                 >
-                    Create lock
+                   <img
+                    className = "icon"
+                    src =
+                    {
+                        match.params.hasOwnProperty ("id") ?
+                        process.env.PUBLIC_URL+"/create-lock-icon.svg" :
+                        process.env.PUBLIC_URL+"/create-lock-grey-icon.svg"
+                    }
+                    />
                 </button>
             </div>
             <div
@@ -393,22 +402,23 @@ function ItemList ({match, location})
                             (pathInfo, index) =>
                             {
                                 return (
-                                    <>
+                                    <div key = {index}>
                                         {
                                             pathInfo.type === "Group" ?
-                                            <Link to = {newPathUrl (pathInfo._id)}>
+                                            <div className = "itemGroup">
                                                 <div
-                                                className = "itemName itemLink"
+                                                className = "itemName itemNameLink"
                                                 key = {index}
+                                                onClick = {() => {setRedirect (<Redirect to = {newPathUrl (pathInfo._id)}/>)}}
                                                 >
-                                                    <div>{pathInfo.name}</div>
-                                                    {
-                                                        typeof pathInfos[index+1] === "undefined" ?
-                                                        <></> :
-                                                        <div className = "rightArrow"/>
-                                                    }
+                                                    {pathInfo.name}
                                                 </div>
-                                            </Link> :
+                                                {
+                                                    typeof pathInfos[index+1] === "undefined" ?
+                                                    <></> :
+                                                    <div className = "rightArrow"/>
+                                                }
+                                            </div> :
                                             <div
                                             className = "itemName"
                                             key = {index}
@@ -421,23 +431,71 @@ function ItemList ({match, location})
                                                 }
                                             </div>
                                         }
-                                    </>
+                                    </div>
                                 );
                             }
                         )
                     }
                 </div>
             </div>
-            <div className = "itemList">
+            <div
+            className = "itemList"
+            onScroll = {(e) => {handleLoadMore (e)}}
+            >
                 {
                     items.map
                     (
                         (item, index) =>
                         {
                             return (
-                                <Link key = {index} to = {newUrl (item._id)}>
+                                <Link
+                                className = "itemLink"
+                                key = {index}
+                                onMouseEnter = {() => {setHover ({button: item._id})}}
+                                onMouseLeave = {() => {setHover ({button: ""})}}
+                                to = {newUrl (item._id)}
+                                >
+                                    <div
+                                    className = "iconBox"
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === item._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6",
+                                            borderColor:
+                                            hover.button === item._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
+                                    >
+                                        <img
+                                        className = "icon"
+                                        src =
+                                        {
+                                            item.type === "Group" ?
+                                            process.env.PUBLIC_URL+"/group-grey-icon.svg" :
+                                            process.env.PUBLIC_URL+"/lock-grey-icon.svg"
+                                        }
+                                        />
+                                    </div>
                                     <button
                                     className = "itemButton"
+                                    style =
+                                    {
+                                        {
+                                            backgroundColor:
+                                            hover.button === item._id ?
+                                            "#f2f2f2" :
+                                            "#ffffff",
+                                            borderColor:
+                                            hover.button === item._id ?
+                                            "#f2f2f2" :
+                                            "#e6e6e6"
+                                        }
+                                    }
                                     key = {index}
                                     >
                                         {item.name}
@@ -452,22 +510,23 @@ function ItemList ({match, location})
                                                     (parentInfo, index) =>
                                                     {
                                                         return (
-                                                            <>
+                                                            <div key = {index}>
                                                                 {
                                                                     parentInfo.type === "Group" ?
-                                                                    <Link to = {newPathUrl (parentInfo._id)}>
+                                                                    <div  className = "itemGroup">
                                                                         <div
-                                                                        className = "itemName itemLink"
+                                                                        className = "itemName itemNameLink"
                                                                         key = {index}
+                                                                        onClick = {() => {setRedirect (<Redirect to = {newPathUrl (parentInfo._id)}/>)}}
                                                                         >
-                                                                            <div>{parentInfo.name}</div>
-                                                                            {
-                                                                                typeof item.parentInfos[index+1] === "undefined" ?
-                                                                                <></> :
-                                                                                <div className = "rightArrow"/>
-                                                                            }
+                                                                            {parentInfo.name}
                                                                         </div>
-                                                                    </Link> :
+                                                                        {
+                                                                            typeof item.parentInfos[index+1] === "undefined" ?
+                                                                            <></> :
+                                                                            <div className = "rightArrow"/>
+                                                                        }
+                                                                    </div> :
                                                                     <div
                                                                     className = "itemName"
                                                                     key = {index}
@@ -480,7 +539,7 @@ function ItemList ({match, location})
                                                                         }
                                                                     </div>
                                                                 }
-                                                            </>
+                                                            </div>
                                                         );
                                                     }
                                                 ) :
@@ -493,24 +552,6 @@ function ItemList ({match, location})
                         }
                     )
                 }
-            </div>
-            <div
-            className = "bottomBox"
-            style = {{display: items.length > 0 ? "block" : "none"}}
-            >
-                <button
-                className = "loadButton"
-                style =
-                {
-                    {
-                        backgroundColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        borderColor: page === pages ? "#e5e5e5" : "#cccccc",
-                        color: page === pages ? "#7f7f7f" : "#000000"
-                    }
-                }
-                onClick = {() => {handleLoadMore ()}}>
-                    Load more
-                </button>
             </div>
             {redirect}
         </div>
