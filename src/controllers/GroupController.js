@@ -7,15 +7,14 @@ module.exports =
 {
     async list (request, response)
     {
-        const {owner} = request.query;
-        const groups = await Group.find ({owner});
+        const groups = await Group.find ().lean ();
         return response.json (groups);
     },
     
     async idindex (request, response)
     {
         const {_id} = request.query;
-        const group = await Group.findById (_id);
+        const group = await Group.findById (_id).lean ();
         return response.json (group);
     },
 

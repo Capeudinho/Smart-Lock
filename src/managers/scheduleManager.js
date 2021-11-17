@@ -2,30 +2,8 @@ const schedule = require ("node-schedule");
 const {checkMonitors} = require ("./monitorManager");
 const Role = require ("../models/Role");
 const Time = require ("../models/Time");
-const Log = require ("../models/Log");
 
 var schedules = [];
-
-var rule = new schedule.RecurrenceRule ();
-rule.hour = 0;
-schedule.scheduleJob
-(
-    {rule},
-    async () =>
-    {
-        const currentDate = new Date ();
-        const logs = await Log.find ();
-        for (var a = 0; a < logs.length; a++)
-        {
-            var difference = currentDate.getTime ()-logs[a].creationDate.getTime ();
-            difference = difference/(1000*3600*24);
-            if (difference > 30)
-            {
-                await Log.findByIdAndDelete (logs[a]._id);
-            }
-        }
-    }
-);
 
 async function addToSchedules ()
 {
@@ -64,7 +42,7 @@ async function addToSchedules ()
                                 {rule},
                                 async () =>
                                 {
-                                    await checkMonitors (time.owner, time._id)
+                                    await checkMonitors (time.owner, time._id);
                                 }
                             )
                         }
@@ -113,7 +91,7 @@ async function addToSchedulesByRole (roleId)
                                 {rule},
                                 async () =>
                                 {
-                                    await checkMonitors (time.owner, time._id)
+                                    await checkMonitors (time.owner, time._id);
                                 }
                             )
                         }

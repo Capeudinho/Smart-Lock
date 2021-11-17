@@ -50,6 +50,7 @@ routes.put ("/lockidupdatemove", LockController.idupdatemove);
 routes.delete ("/lockiddestroy", LockController.iddestroy);
 
 routes.get ("/rolelist", RoleController.list);
+routes.get ("/rolelistowner", RoleController.listowner);
 routes.get ("/rolelistpag", RoleController.listpag);
 routes.get ("/roleidindex", RoleController.idindex);
 routes.post ("/rolestore", RoleController.store);

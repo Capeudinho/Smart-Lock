@@ -19,8 +19,7 @@ async function addToStatus ()
                 (
                     {
                         lockId: lock._id,
-                        state: null,
-                        power: null
+                        status: {}
                     }
                 );
             }
@@ -47,8 +46,7 @@ async function addToStatusByLock (lockId)
             (
                 {
                     lockId: lock._id,
-                    state: null,
-                    power: null
+                    status: {}
                 }
             );
             a = accountRelations.length;
@@ -116,7 +114,7 @@ async function getStatusByLock (lockId)
             {
                 if (accountRelations[a].statusRelations[b].lockId.toString () === lockId.toString ())
                 {
-                    var {lockId, ...status} = accountRelations[a].statusRelations[b];
+                    var status = accountRelations[a].statusRelations[b].status;
                     return (status);
                 }
             }
@@ -124,19 +122,27 @@ async function getStatusByLock (lockId)
     }
 }
 
-async function statusUpdate (_id, state, power)
+async function statusUpdate (lockPIN, lockStatus, identifier)
 {
-    var lock = await Lock.findById (_id).lean ();
+    var account = await Account.findOne ({"connectionOptions.identifier": identifier});
+    if (account === null)
+    {
+        return;
+    }
+    var lock = await Lock.findOne ({PIN: lockPIN, owner: account._id}).lean ();
+    if (lock === null)
+    {
+        return;
+    }
     for (var a = 0; a < accountRelations.length; a++)
     {
         if (accountRelations[a].accountId.toString () === lock.owner.toString ())
         {
             for (var b = 0; b < accountRelations[a].statusRelations.length; b++)
             {
-                if (accountRelations[a].statusRelations[b].lockId.toString () === _id.toString ())
+                if (accountRelations[a].statusRelations[b].lockId.toString () === lock._id.toString ())
                 {
-                    accountRelations[a].statusRelations[b].state = state;
-                    accountRelations[a].statusRelations[b].power = power;
+                    accountRelations[a].statusRelations[b].status = lockStatus;
                 }
             }
         }

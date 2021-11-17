@@ -62,41 +62,7 @@ async function addToMqtt ()
             var client = await mqtt.connectAsync (accounts[a].connectionOptions.brokerHost);
             await client.subscribe (accounts[a].connectionOptions.accessCheckTopic);
             await client.subscribe (accounts[a].connectionOptions.statusUpdateTopic);
-            client.on
-            (
-                "message",
-                async (topic, message) =>
-                {
-                    message = JSON.parse (message);
-                    var lockId = message.lockId;
-                    var lock = await Lock.findById (lockId).lean ();
-                    var account = await Account.findById (lock.owner).lean ();
-                    if (topic === account.connectionOptions.accessCheckTopic)
-                    {
-                        var reply = await accessCheck (lockId, message.userPIN);
-                        if (reply)
-                        {
-                            client.publish
-                            (
-                                account.connectionOptions.accessReplyTopic+"/"+lockId,
-                                "true"
-                            );
-                        }
-                        else
-                        {
-                            client.publish
-                            (
-                                account.connectionOptions.accessReplyTopic+"/"+lockId,
-                                "false"
-                            );
-                        }
-                    }
-                    else if (topic === account.connectionOptions.statusUpdateTopic)
-                    {
-                        await statusUpdate (lockId, message.lockState, message.lockPower);
-                    }
-                }
-            );
+            client.on ("message", async (topic, message) => {await handleMessage (client, topic, message)});
             brokerRelations.push
             (
                 {
@@ -174,41 +140,7 @@ async function addToMqttByAccount (accountId)
         var client = await mqtt.connectAsync (account.connectionOptions.brokerHost);
         await client.subscribe (account.connectionOptions.accessCheckTopic);
         await client.subscribe (account.connectionOptions.statusUpdateTopic);
-        client.on
-        (
-            "message",
-            async (topic, message) =>
-            {
-                message = JSON.parse (message);
-                var lockId = message.lockId;
-                var lock = await Lock.findById (lockId).lean ();
-                var account = await Account.findById (lock.owner).lean ();
-                if (topic === account.connectionOptions.accessCheckTopic)
-                {
-                    var reply = await accessCheck (lockId, message.userPIN);
-                    if (reply)
-                    {
-                        client.publish
-                        (
-                            account.connectionOptions.accessReplyTopic+"/"+lockId,
-                            "true"
-                        );
-                    }
-                    else
-                    {
-                        client.publish
-                        (
-                            account.connectionOptions.accessReplyTopic+"/"+lockId,
-                            "false"
-                        );
-                    }
-                }
-                else if (topic === account.connectionOptions.statusUpdateTopic)
-                {
-                    await statusUpdate (lockId, message.lockState, message.lockPower);
-                }
-            }
-        );
+        client.on ("message", async (topic, message) => {await handleMessage (client, topic, message)});
         brokerRelations.push
         (
             {
@@ -293,15 +225,88 @@ async function testBrokerHost (brokerHost)
     return true;
 }
 
-async function openLockById (lockId)
+async function openMqttLockById (lockId)
 {
     var lock = await Lock.findById (lockId).lean ();
+    var lockPIN = lock.PIN;
     var account = await Account.findById (lock.owner).lean ();
-    client.publish
+    await client.publish
     (
-        account.connectionOptions.directCommandTopic+"/"+lockId,
+        account.connectionOptions.directCommandTopic+"/"+lockPIN,
         "open"
     );
+}
+
+async function handleMessage (client, topic, message)
+{
+    try
+    {
+        message = JSON.parse (message.toString ());
+        if
+        (
+            typeof message === "object" &&
+            !Array.isArray (message) &&
+            message !== null &&
+            message.hasOwnProperty ("lockPIN") &&
+            message.hasOwnProperty ("identifier") &&
+            typeof message.lockPIN === "string" &&
+            typeof message.identifier === "string"
+        )
+        {
+            var {lockPIN, identifier} = message;
+            var account = await Account.findOne ({"connectionOptions.identifier": identifier}).lean ();
+            var lock = await Lock.findOne ({PIN: lockPIN, owner: account._id}).lean ();
+            if (lock !== null)
+            {
+                if (topic === account.connectionOptions.accessCheckTopic)
+                {
+                    if
+                    (
+                        message.hasOwnProperty ("userPIN") &&
+                        typeof message.userPIN === "string"
+                    )
+                    {
+                        var {userPIN} = message;
+                        var reply = await accessCheck (lockPIN, userPIN, identifier);
+                        if (reply)
+                        {
+                            await client.publish
+                            (
+                                account.connectionOptions.accessReplyTopic+"/"+lockPIN,
+                                JSON.stringify ({command: "open"})
+                            );
+                        }
+                        else
+                        {
+                            await client.publish
+                            (
+                                account.connectionOptions.accessReplyTopic+"/"+lockPIN,
+                                JSON.stringify ({command: "close"})
+                            );
+                        }
+                    }
+                }
+                else if (topic === account.connectionOptions.statusUpdateTopic)
+                {
+                    if
+                    (
+                        message.hasOwnProperty ("lockStatus") &&
+                        typeof message.lockStatus === "object" &&
+                        !Array.isArray (message.lockStatus) &&
+                        message.lockStatus !== null
+                    )
+                    {
+                        var {lockStatus} = message;
+                        await statusUpdate (lockPIN, lockStatus, identifier);
+                    }
+                }
+            }
+        }
+    }
+    catch (error)
+    {
+        return;
+    }
 }
 
 module.exports =
@@ -311,5 +316,5 @@ module.exports =
     removeFromMqttByAccount,
     removeFromMqttByUnused,
     testBrokerHost,
-    openLockById
+    openMqttLockById
 };

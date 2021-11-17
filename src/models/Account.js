@@ -8,11 +8,16 @@ const AccountSchema = new mongoose.Schema
         password: String,
         connectionOptions:
         {
+            identifier: String,
             brokerHost: String,
             accessCheckTopic: String,
             accessReplyTopic: String,
             statusUpdateTopic: String,
-            directCommandTopic: String
+            directCommandTopic: String,
+            accessCheckRoute: String,
+            accessReplyRoute: String,
+            statusUpdateRoute: String,
+            directCommandRoute: String
         }
     }
 );

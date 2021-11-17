@@ -7,26 +7,27 @@ const Time = require ("../models/Time");
 const Log = require ("../models/Log");
 const {addToMonitorsByAccount, removeFromMonitorsByAccount} = require ("../managers/monitorManager");
 const {addToMqttByAccount, removeFromMqttByAccount, removeFromMqttByUnused, testBrokerHost} = require ("../managers/mqttManager");
+const {addToHttpByAccount, addToHttpByRoutes, removeFromHttpByAccount} = require ("../managers/httpManager");
 
 module.exports =
 {
     async list (request, response)
     {
-        const accounts = await Account.find ();
+        const accounts = await Account.find ().lean ();
         return response.json (accounts);
     },
     
     async idindex (request, response)
     {
         const {_id} = request.query;
-        const account = await Account.findById (_id);
+        const account = await Account.findById (_id).lean ();
         return response.json (account);
     },
 
     async loginindex (request, response)
     {
         const {email, password} = request.query;
-        const account = await Account.findOne ({email, password});
+        const account = await Account.findOne ({email, password}).lean ();
         return response.json (account);
     },
 
@@ -37,6 +38,17 @@ module.exports =
         var newAccount = null;
         if (account === null)
         {
+            var identifier = "";
+            var invalid = true;
+            while (invalid)
+            {
+                identifier = Math.random ().toString ().substring (2);
+                const otherAccount = await Account.findOne ({identifier});
+                if (otherAccount === null)
+                {
+                    invalid = false;
+                }
+            }
             newAccount = await Account.create
             (
                 {
@@ -45,16 +57,23 @@ module.exports =
                     password,
                     connectionOptions:
                     {
+                        identifier,
                         brokerHost: "mqtt://broker.hivemq.com",
                         accessCheckTopic: "smartlock/accesscheck",
                         accessReplyTopic: "smartlock/accessreply",
                         statusUpdateTopic: "smartlock/statusupdate",
-                        directCommandTopic: "smartlock/directcommand"
+                        directCommandTopic: "smartlock/directcommand",
+                        accessCheckRoute: "smartlock/accesscheck",
+                        accessReplyRoute: "smartlock/accessreply",
+                        statusUpdateRoute: "smartlock/statusupdate",
+                        directCommandRoute: "smartlock/directcommand"
                     }
                 }
             );
             await Group.create ({name: "Root", parents: [], roles: [], usedTimes: [], owner: newAccount._id});
             addToMonitorsByAccount (newAccount._id);
+            await addToHttpByAccount (newAccount._id);
+            addToHttpByRoutes ();
             await addToMqttByAccount (newAccount._id);
         }
         return response.json (newAccount);
@@ -79,8 +98,11 @@ module.exports =
         const {connectionOptions} = request.body;
         if (await testBrokerHost (connectionOptions.brokerHost))
         {
+            await removeFromHttpByAccount (_id);
             await removeFromMqttByAccount (_id);
-            newAccount = await Account.findByIdAndUpdate (_id, {connectionOptions}, {new: true});
+            var newAccount = await Account.findByIdAndUpdate (_id, {connectionOptions}, {new: true});
+            await addToHttpByAccount (_id);
+            addToHttpByRoutes ();
             await addToMqttByAccount (_id);
             await removeFromMqttByUnused ();
             return response.json (newAccount);
@@ -94,7 +116,9 @@ module.exports =
     async iddestroy (request, response)
     {
         const {_id} = request.query;
+        await removeFromHttpByAccount (_id);
         await removeFromMqttByAccount (_id);
+        addToHttpByRoutes ();
         await removeFromMqttByUnused ();
         removeFromMonitorsByAccount (_id);
         const account = await Account.findByIdAndDelete (_id);

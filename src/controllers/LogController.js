@@ -4,8 +4,7 @@ module.exports =
 {
     async list (request, response)
     {
-        const {owner} = request.query;
-        const logs = await Log.find ({owner}).lean ();
+        const logs = await Log.find ().lean ();
         return response.json (logs);
     },
 
@@ -33,7 +32,7 @@ module.exports =
             },
             {
                 page,
-                limit: 20,
+                limit: 50,
                 sort: "-creationDate",
                 lean: true
             }

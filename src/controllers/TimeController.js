@@ -4,15 +4,14 @@ module.exports =
 {
     async list (request, response)
     {
-        const {owner} = request.query;
-        const times = await Time.find ({owner});
+        const times = await Time.find ().lean ();
         return response.json (times);
     },
     
     async idindex (request, response)
     {
         const {_id} = request.query;
-        const time = await Time.findById (_id);
+        const time = await Time.findById (_id).lean ();
         return response.json (time);
     },
 

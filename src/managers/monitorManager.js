@@ -323,7 +323,7 @@ async function addToMonitorsByLock (lockId)
                 (
                     {
                         userId: user._id,
-                        lockId: locks[a]._id,
+                        lockId: lock._id,
                         access: false
                     }
                 );
@@ -527,7 +527,6 @@ async function checkMonitors (owner, timeId)
                                 }
                             );
                             pathNames.push (lock.name);
-                            // var log = await Log.create
                             await Log.create
                             (
                                 {
@@ -540,7 +539,6 @@ async function checkMonitors (owner, timeId)
                                     owner: user.owner
                                 }
                             );
-                            // io.emit ("log", log);
                         }
                     }
                 }

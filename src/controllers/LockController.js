@@ -9,31 +9,41 @@ module.exports =
 {
     async list (request, response)
     {
-        const {owner} = request.query;
-        const locks = await Lock.find ({owner});
+        const locks = await Lock.find ().lean ();
         return response.json (locks);
     },
     
     async idindex (request, response)
     {
         const {_id} = request.query;
-        const lock = await Lock.findById (_id);
+        const lock = await Lock.findById (_id).lean ();
         return response.json (lock);
     },
 
     async idopen (request, response)
     {
         const {_id} = request.query;
-        commandOpen (_id);
+        await commandOpen (_id);
         return response.json (_id);
     },
 
     async store (request, response)
     {
-        const {name, lastParent, owner} = request.body;
+        const {name, lastParent, protocol, host, port, owner} = request.body;
         const parent = await Item.findById (lastParent).lean ();
         var parents = parent.parents.concat (lastParent);
-        const newLock = await Lock.create ({name, parents, owner});
+        var PIN = "";
+        var invalid = true;
+        while (invalid)
+        {
+            PIN = Math.random ().toString ().substring (2);
+            const otherLock = await Lock.findOne ({PIN});
+            if (otherLock === null)
+            {
+                invalid = false;
+            }
+        }
+        var newLock = await Lock.create ({name, parents, PIN, protocol, host, port, owner});
         await addToMonitorsByLock (newLock._id);
         await addToStatusByLock (newLock._id);
         return response.json (newLock);
@@ -42,8 +52,13 @@ module.exports =
     async idupdate (request, response)
     {
         const {_id} = request.query;
-        const {name, owner} = request.body;
-        var newLock = await Lock.findByIdAndUpdate (_id, {name, owner}, {new: true});
+        const {name, PIN, protocol, host, port, owner} = request.body;
+        const lock = await Lock.findOne ({PIN, owner});
+        var newLock = null;
+        if (lock === null  || lock._id == _id)
+        {
+            newLock = await Lock.findByIdAndUpdate (_id, {name, PIN, protocol, host, port, owner}, {new: true});
+        }
         return response.json (newLock);
     },
 

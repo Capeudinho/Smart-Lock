@@ -7,8 +7,7 @@ module.exports =
 {
     async list (request, response)
     {
-        const {owner} = request.query;
-        const items = await Item.find ({owner});
+        const items = await Item.find ().lean ();
         return response.json (items);
     },
 
@@ -17,7 +16,7 @@ module.exports =
         var {page, name, owner} = request.query;
         if (name === "") {var nameValue = {$exists: true};}
         else {var nameValue = {"$regex": name, "$options": "i"};}
-        var items = await Item.paginate ({name: nameValue, owner, "parents.0": {$exists: true}}, {page, limit: 20, lean: true});
+        var items = await Item.paginate ({name: nameValue, owner, "parents.0": {$exists: true}}, {page, limit: 50, lean: true});
         for (var a = 0; a < items.docs.length; a++)
         {
             items.docs[a].parentInfos = [];
@@ -71,7 +70,7 @@ module.exports =
     async parentindexpag (request, response)
     {
         const {page, parent} = request.query;
-        var items = await Item.paginate ({$expr: {$eq: [{"$arrayElemAt": ["$parents", -1]}, parent]}}, {page, limit: 20});
+        var items = await Item.paginate ({$expr: {$eq: [{"$arrayElemAt": ["$parents", -1]}, parent]}}, {page, limit: 50});
         var lastParent = await Item.findById (parent).lean ();
         var parents = await Item.find ({_id: lastParent.parents}).lean ();
         parents.push (lastParent);

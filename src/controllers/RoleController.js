@@ -9,8 +9,14 @@ module.exports =
 {
     async list (request, response)
     {
+        const roles = await Role.find ().lean ();
+        return response.json (roles);
+    },
+
+    async listowner (request, response)
+    {
         const {owner} = request.query;
-        const roles = await Role.find ({owner}).populate ("times");
+        const roles = await Role.find ({owner}).populate ("times").lean ();
         return response.json (roles);
     },
 
@@ -19,14 +25,14 @@ module.exports =
         var {page, name, owner} = request.query;
         if (name === "") {var nameValue = {$exists: true};}
         else {var nameValue = {"$regex": name, "$options": "i"};}
-        const roles = await Role.paginate ({name: nameValue, owner}, {page, limit: 20});
+        const roles = await Role.paginate ({name: nameValue, owner}, {page, limit: 50});
         return response.json (roles);
     },
     
     async idindex (request, response)
     {
         const {_id} = request.query;
-        const role = await Role.findById (_id).populate ("times");
+        const role = await Role.findById (_id).populate ("times").lean ();
         return response.json (role);
     },
 
@@ -47,7 +53,7 @@ module.exports =
         var addedUsedTimes = [];
         for (var a = 0; a < timeInfos.length; a++)
         {
-            if (timeInfos[a]._id === null)
+            if (timeInfos[a]._id.split ("/////")[0] === "createdTime")
             {
                 var newTime = await Time.create
                 (
