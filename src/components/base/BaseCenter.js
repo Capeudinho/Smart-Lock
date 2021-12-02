@@ -6,7 +6,6 @@ function BaseCenter ()
 {
     return (
         <div className = "baseCenterArea">
-
         </div>
     );
 }

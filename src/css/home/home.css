@@ -1,0 +1,32 @@
+.homeArea
+{
+    padding: 10px;
+}
+
+.homeArea p
+{
+    color: #333333;
+    line-height: 150%;
+}
+
+.homeArea .title
+{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.homeArea .subtitle
+{
+    font-weight: bold;
+}
+
+.homeArea .text
+{
+    margin-bottom: 10px;
+}
+
+.homeArea a
+{
+    color: #2895cc;
+    text-decoration: underline;
+}
