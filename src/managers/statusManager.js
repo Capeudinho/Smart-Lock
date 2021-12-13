@@ -32,7 +32,17 @@ async function addToStatus ()
             }
         );
     }
-    
+}
+
+function addToStatusByAccount (accountId)
+{
+    accountRelations.push
+    (
+        {
+            accountId,
+            statusRelations: []
+        }
+    );
 }
 
 async function addToStatusByLock (lockId)
@@ -78,6 +88,18 @@ async function removeFromStatusByGroup (groupId)
                     b--;
                 }
             }
+            a = accountRelations.length;
+        }
+    }
+}
+
+function removeFromStatusByAccount (accountId)
+{
+    for (var a = 0; a < accountRelations.length; a++)
+    {
+        if (accountRelations[a].accountId.toString () === accountId.toString ())
+        {
+            accountRelations.splice (a, 1);
             a = accountRelations.length;
         }
     }
@@ -152,7 +174,9 @@ async function statusUpdate (lockPIN, lockStatus, identifier)
 module.exports =
 {
     addToStatus,
+    addToStatusByAccount,
     addToStatusByLock,
+    removeFromStatusByAccount,
     removeFromStatusByGroup,
     removeFromStatusByLock,
     getStatusByLock,

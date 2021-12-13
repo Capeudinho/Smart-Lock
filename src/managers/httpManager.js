@@ -100,7 +100,7 @@ async function removeFromHttpByAccount (accountId)
             accessCheckRouteRelations[a].uses = accessCheckRouteRelations[a].uses-1;
             if (accessCheckRouteRelations[a].uses === 0)
             {
-                accessCheckRouteRelations.slice (a, 1);
+                accessCheckRouteRelations.splice (a, 1);
                 accessCheckRoutes.splice (a, 1);
             }
         }
@@ -110,10 +110,10 @@ async function removeFromHttpByAccount (accountId)
         if (statusUpdateRouteRelations[b].route === account.connectionOptions.statusUpdateRoute)
         {
             statusUpdateRouteRelations[b].uses = statusUpdateRouteRelations[b].uses-1;
-            if (statusUpdateRouteRelations[a].uses === 0)
+            if (statusUpdateRouteRelations[b].uses === 0)
             {
-                statusUpdateRouteRelations.slice (a, 1);
-                statusUpdateRoutes.splice (a, 1);
+                statusUpdateRouteRelations.splice (b, 1);
+                statusUpdateRoutes.splice (b, 1);
             }
         }
     }

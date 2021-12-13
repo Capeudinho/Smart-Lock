@@ -8,6 +8,7 @@ const Log = require ("../models/Log");
 const {addToMonitorsByAccount, removeFromMonitorsByAccount} = require ("../managers/monitorManager");
 const {addToMqttByAccount, removeFromMqttByAccount, removeFromMqttByUnused, testBrokerHost} = require ("../managers/mqttManager");
 const {addToHttpByAccount, addToHttpByRoutes, removeFromHttpByAccount} = require ("../managers/httpManager");
+const {addToStatusByAccount, removeFromStatusByAccount} = require ("../managers/statusManager");
 
 module.exports =
 {
@@ -75,6 +76,7 @@ module.exports =
             await addToHttpByAccount (newAccount._id);
             addToHttpByRoutes ();
             await addToMqttByAccount (newAccount._id);
+            addToStatusByAccount (newAccount._id);
         }
         return response.json (newAccount);
     },
@@ -116,6 +118,7 @@ module.exports =
     async iddestroy (request, response)
     {
         const {_id} = request.query;
+        removeFromStatusByAccount (_id);
         await removeFromHttpByAccount (_id);
         await removeFromMqttByAccount (_id);
         addToHttpByRoutes ();

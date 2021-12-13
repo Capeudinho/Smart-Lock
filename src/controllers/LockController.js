@@ -3,7 +3,7 @@ const Group = require ("../models/Group");
 const Item = require ("../models/Item");
 const {commandOpen} = require ("../managers/commandManager");
 const {addToMonitorsByLock, removeFromMonitorsByLock} = require ("../managers/monitorManager");
-const {addToStatusByLock, removeFromStatusByLock} = require ("../managers/statusManager");
+const {addToStatusByLock, removeFromStatusByLock, getStatusByLock} = require ("../managers/statusManager");
 
 module.exports =
 {
@@ -46,6 +46,8 @@ module.exports =
         var newLock = await Lock.create ({name, parents, PIN, protocol, host, port, owner});
         await addToMonitorsByLock (newLock._id);
         await addToStatusByLock (newLock._id);
+        newLock = newLock.toObject ();
+        newLock.status = await getStatusByLock (newLock._id);
         return response.json (newLock);
     },
 

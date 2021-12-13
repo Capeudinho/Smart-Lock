@@ -230,11 +230,18 @@ async function openMqttLockById (lockId)
     var lock = await Lock.findById (lockId).lean ();
     var lockPIN = lock.PIN;
     var account = await Account.findById (lock.owner).lean ();
-    await client.publish
-    (
-        account.connectionOptions.directCommandTopic+"/"+lockPIN,
-        "open"
-    );
+    for (var a = 0; a < brokerRelations.length; a++)
+    {
+        if (brokerRelations[a].broker === account.connectionOptions.brokerHost)
+        {
+            await brokerRelations[a].client.publish
+            (
+                account.connectionOptions.directCommandTopic+"/"+lockPIN,
+                JSON.stringify ({command: "open"})
+            );
+            a = brokerRelations.length;
+        }
+    }
 }
 
 async function handleMessage (client, topic, message)
